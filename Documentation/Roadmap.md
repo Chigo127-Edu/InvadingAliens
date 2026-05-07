@@ -35,8 +35,7 @@ Questo progetto seguirà una roadmap, tramite cui verrà determinato il criterio
 - [ ] Vite e clausola per fine gioco [--> Chigo127-Edu, Ale-Cioffo]
     - [ ] Collegamento con le collisioni, determinazione vite [--> Chigo127-Edu]
     - [ ] Al termine delle vite il gioco finisce [--> Chigo127-Edu]
-    - [ ] Il gioco è a permanenza (Come il chrome dino) e c’è un aumento graduale della difficoltà, ossia quanto descritto nel punto 7  (progresso) [--> Ale-Cioffo]
-        - [ ] Il criterio di aumento della difficoltà è definito grossolanamente. [--> Ale-Cioffo]
+    - [ ] Il gioco è a permanenza (Come il chrome dino) e c’è un aumento graduale della difficoltà (progresso) [--> Ale-Cioffo]
 ######
 
 ## Terza settimana (da Lun 18/05 a Gio 21/05)
