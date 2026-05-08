@@ -10,11 +10,11 @@ Questo progetto seguirà una roadmap, tramite cui verrà determinato il criterio
 ######
 
 ## Prima settimana (da Lun 04/05 a Dom 10/05)
-- [ ] Creazione della navicella + Pixel art (Una matrice di valori) [--> Ale-Cioffo]
+- [x] Creazione della navicella + Pixel art (Una matrice di valori) [--> Ale-Cioffo]
 - [ ] Creazione degli ostacoli + pixel art [--> Ale-Cioffo]
-- [ ] Movimento della navicella [--> Chigo127-Edu]
-    - [ ] Aggiornamento coordinate della matrice che viene ridisegnata [--> Chigo127-Edu]
-    - [ ] Il Movimento è unidirezionale (Solo orizzontale oppure verticale) [--> Chigo127-Edu]
+- [x] Movimento della navicella [--> Chigo127-Edu]
+    - [x] Aggiornamento coordinate della matrice che viene ridisegnata [--> Chigo127-Edu]
+    - [x] Il Movimento è unidirezionale (Solo orizzontale oppure verticale) [--> Chigo127-Edu]
 - [ ] Movimento ostacoli su console (no generazione, inizialmente ostacoli fissi) [--> Chigo127-Edu]
     - [ ] Aggiornamento coordinate della matrice che viene ridisegnata [--> Chigo127-Edu]
     - [ ] Il movimento è unidirezionale (inizialmente orientamento opposto alla navicella) [--> Chigo127-Edu]
