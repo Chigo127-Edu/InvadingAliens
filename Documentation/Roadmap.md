@@ -4,23 +4,18 @@ Questo progetto seguirà una roadmap, tramite cui verrà determinato il criterio
 ######
 
 ## Indice
-- [ ] Prima settimana: Creazione modelli, movimento
+- [x] Prima settimana: Creazione modelli, movimento
 - [ ] Seconda settimana: Logica del gioco e gestione collisioni
 - [ ] Terza settimana: Perfezionamento e rifinitura
 ######
 
 ## Prima settimana (da Lun 04/05 a Dom 10/05)
 - [x] Creazione della navicella + Pixel art (Una matrice di valori) [--> Ale-Cioffo]
-- [ ] Creazione degli ostacoli + pixel art [--> Ale-Cioffo]
+- [x] Creazione degli ostacoli + pixel art [--> Ale-Cioffo]
+- [x] Creazione di proiettili [--> Chigo127-Edu]
 - [x] Movimento della navicella [--> Chigo127-Edu]
-    - [x] Aggiornamento coordinate della matrice che viene ridisegnata [--> Chigo127-Edu]
-    - [x] Il Movimento è unidirezionale (Solo orizzontale oppure verticale) [--> Chigo127-Edu]
-- [ ] Movimento ostacoli su console (no generazione, inizialmente ostacoli fissi) [--> Chigo127-Edu]
-    - [ ] Aggiornamento coordinate della matrice che viene ridisegnata [--> Chigo127-Edu]
-    - [ ] Il movimento è unidirezionale (inizialmente orientamento opposto alla navicella) [--> Chigo127-Edu]
-- [ ] Movimento dei proiettili + pixel art [--> Ale-Cioffo]
-    - [ ] Aggiornamento coordinate della matrice che viene ridisegnata [--> Ale-Cioffo]
-    - [ ] Il movimento è unidirezionale, (inizialmente orientamento opposto alla ai nemici) [--> Ale-Cioffo]
+- [x] Movimento ostacoli su console [--> Chigo127-Edu]
+- [x] Movimento dei proiettili[--> Ale-Cioffo]
 ######
 
 ## Seconda settimana (da Lun 11/05 a Dom 17/05)
