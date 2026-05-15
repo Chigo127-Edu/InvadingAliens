@@ -19,24 +19,27 @@ namespace RetroGameDemo
         // GAME DATA
         // Declare here game-specific data that should survive the frame
 
+        int Lives = 1; // da cambiare
+        bool OnGoing = true;
+
         // Spaceship Image, position and speed
         GameImage Spaceship_Image = new GameImage(
         new int[,]
         {
-            {0, 0, 0, 0, 0 ,1, 1, 0, 0, 0, 0, 0,},
-            {0, 0, 0, 0, 0 ,1, 1, 0, 0, 0, 0, 0,},
-            {0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0,},
-            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-            {0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0 },
-            {0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0 },
+            {0, 0, 0, 0, 0 ,1, 1, 1, 0, 0, 0, 0, 0,},
+            {0, 0, 0, 0, 0 ,1, 1, 1, 0, 0, 0, 0, 0,},
+            {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0,},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+            {0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0 },
+            {0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0 },
         },
         AnchorType.Center);
 
         int[] Spaceship_Pos;
         int[] Spaceship_Vel;
-        int[] Spaceship_Radius = new int[] { 6, 1 };
+        int[] Spaceship_Radius = new int[] { 6, 4 };
 
         // Projectile Image, position and speed
         GameImage Projectile_Image = new GameImage(
@@ -62,7 +65,7 @@ namespace RetroGameDemo
         List<int[]> Enemy_Pos = new List<int[]>();
         List<int[]> Enemy_Vel = new List<int[]>();
         int[] Enemy_Radius = new int[] { 2, 2 };
-        int Enemy_Generation_Interval = 72;
+        int Enemy_Generation_Interval = 24;
 
         // Initialization call, used to customize GameConfig data (used to customize the engine behaviour)
         protected override void OnInitGameConfig(GameConfig GameConfig)
@@ -74,6 +77,7 @@ namespace RetroGameDemo
             GameConfig.FrameRate = 24;
             GameConfig.ForegroundColor = System.Drawing.Color.White;
             GameConfig.BackgroundColor = System.Drawing.Color.Black;
+            GameConfig.randomGeneratorSeed = 852346891;
         }
 
         // Called at the start of the first frame of the game.
@@ -95,23 +99,32 @@ namespace RetroGameDemo
         // Here the actual logic happens.
         protected override void OnLoopGame(float deltaTime)
         {
-            Enemy_Generation();
-
-            if (FrameCount == 0)
+            if(OnGoing)
             {
-                FirstFrameLoop();
-            }
-            else
+                Enemy_Generation();
+                if (FrameCount == 0)
+                {
+                    FirstFrameLoop();
+                }
+                else
+                {
+                    Despawn(Enemy_Pos, Enemy_Vel);
+                    Despawn(Projectile_Pos, Projectile_Vel);
+
+                    Check_For_Collisions(Enemy_Pos, Enemy_Radius, Projectile_Pos, Projectile_Radius);
+                    Check_For_Spaceship_Threat(Spaceship_Pos, Spaceship_Radius, Enemy_Pos, Enemy_Radius);
+
+                    if (Lives < 0) OnGoing = false;
+
+                    Movement(Enemy_Pos, Enemy_Vel);
+                    Movement(Projectile_Pos, Projectile_Vel);
+
+                    Spaceship_Border(Spaceship_Pos, Spaceship_Vel, Spaceship_Radius, 1);
+                }
+            } else
             {
-                Despawn(Enemy_Pos, Enemy_Vel);
-
-                Movement(Enemy_Pos, Enemy_Vel);
-
-                Movement(Projectile_Pos, Projectile_Vel);
-
-                Spaceship_Border(Spaceship_Pos, Spaceship_Vel);
+                OnEndGame();
             }
-
         }
 
         // Called once per frame, AFTER the OnLoopGame event.
@@ -120,15 +133,10 @@ namespace RetroGameDemo
             int ScreenWidth = pixels.GetLength(0);
             int ScreenHeight = pixels.GetLength(1);
 
-            for (int i = 0; i < Enemy_Pos.Count; i++)
-            {
-                GameUtils.DrawImageOnScreen(pixels, Enemy_Image, new Point((int)(Enemy_Pos[i][0]), (int)(Enemy_Pos[i][1])));
-            }
+            DrawElementsKind(pixels, Projectile_Image, Projectile_Pos);
 
-            for (int i = 0; i < Projectile_Pos.Count; i++)
-            {
-                GameUtils.DrawImageOnScreen(pixels, Projectile_Image, new Point((int)(Projectile_Pos[i][0]), (int)(Projectile_Pos[i][1])));
-            }
+            DrawElementsKind(pixels, Enemy_Image, Enemy_Pos);
+
             GameUtils.DrawImageOnScreen(pixels, Spaceship_Image, new Point((int)(Spaceship_Pos[0]), (int)(Spaceship_Pos[1])));
         }
 
@@ -155,7 +163,6 @@ namespace RetroGameDemo
         protected override void OnKeyPress(Keys KeyCode)
         {
             Spaceship_Movement(KeyCode);
-
 
             bool Pause = false;
             if (KeyCode == Keys.P)
@@ -188,7 +195,8 @@ namespace RetroGameDemo
             {
                 for (int i = 0; i < 6; i++)
                 {
-                    Enemy_Pos.Add(new int[] { (int)(GameConfig.PixelsMatrixWidth * (2 * i + 1) / 12), (int)(5) });
+                    //Enemy_Pos.Add(new int[] { (int)(GameConfig.PixelsMatrixWidth * (2 * i + 1) / 12), (int)(5) });
+                    Enemy_Pos.Add(new int[] { (int)(GameConfig.PixelsMatrixWidth * (float) RandomGenerator.Next()/2147483647), (int)(5) });
                     Enemy_Vel.Add(new int[] { 0, 1 }); // Velocità da cambiare in seguito
                 }
             }
@@ -215,24 +223,65 @@ namespace RetroGameDemo
             }
         }
         
-        void Spaceship_Border(int[] This_Pos, int[] This_Vel)
+        void Spaceship_Border(int[] This_Pos, int[] This_Vel, int[] This_Radius, int Offset)
         {
-            if (This_Pos[0] < 10) This_Pos[0] = 7;
-            if (This_Pos[0] > GameConfig.PixelsMatrixWidth - 7) This_Pos[0] = GameConfig.PixelsMatrixWidth - 7;
-            if (This_Pos[1] < 3) This_Pos[1] = 3;
-            if (This_Pos[1] > GameConfig.PixelsMatrixHeight - 3) This_Pos[1] = GameConfig.PixelsMatrixHeight - 3;
+            if (This_Pos[0] < This_Radius[0] + Offset) This_Pos[0] = This_Radius[0] + Offset;
+            if (This_Pos[0] > GameConfig.PixelsMatrixWidth - This_Radius[0] -1 - Offset) This_Pos[0] = GameConfig.PixelsMatrixWidth - This_Radius[0] -1 - Offset;
+            if (This_Pos[1] < This_Radius[1] + Offset) This_Pos[1] = This_Radius[1] + Offset;
+            if (This_Pos[1] > GameConfig.PixelsMatrixHeight - This_Radius[1] - Offset) This_Pos[1] = GameConfig.PixelsMatrixHeight - This_Radius[1] - Offset;
         }
 
-        void Projectile_Collision(List<int[]> Projectile_Pos, int Projectile_Radius, List<int[]> Enemy_Pos, int[] Enemy_Radius)
+        void Check_For_Collisions(List<int[]> First_Pos, int[] First_Radius, List<int[]> Second_Pos, int[] Second_Radius)
         {
-
+            for (int i = 0; i < First_Pos.Count; i++)
+            {
+                for (int j = 0; j < Second_Pos.Count; j++)
+                {
+                    if (Verify_Collision(First_Pos[i], First_Radius, Second_Pos[j], Second_Radius))
+                    {
+                        First_Pos.Remove(First_Pos[i]);
+                        Second_Pos.Remove(Second_Pos[j]);
+                    }
+                }
+            }
         }
 
-        bool Verify_Collision(List<int[]> First_Pos, int[] First_Radius, List<int[]> Second_Pos, int[] Second_Radius)
+        void Check_For_Spaceship_Threat(int[] Spaceship_Pos, int[] Spaceship_Radius, List<int[]> Second_Pos, int[] Second_Radius)
         {
+            for (int j = 0; j < Second_Pos.Count; j++)
+            {
+                if (Verify_Collision(Spaceship_Pos, Spaceship_Radius, Second_Pos[j], Second_Radius))
+                {
+                    Lives--;
+                    Second_Pos.Remove(Second_Pos[j]);
+                }
+            }
+        }
 
+        int AlwaysPositive(int Number)
+        {
+            if (Number < 0) return -Number;
+            else return Number;
+        }
 
-            return false; // da levare
+        int DeltaCoord(int First_Point, int Second_Point)
+        {
+            return AlwaysPositive(First_Point - Second_Point);
+        }
+
+        bool Verify_Collision(int[] First_Pos, int[] First_Radius, int[] Second_Pos, int[] Second_Radius)
+        {
+            if (DeltaCoord(First_Pos[0], Second_Pos[0]) - (First_Radius[0] + Second_Radius[0]) < 0
+                && DeltaCoord(First_Pos[1], Second_Pos[1]) - (First_Radius[1] + Second_Radius[1]) < 0) return true;
+            else return false;
+        }
+
+        void DrawElementsKind(int[,] pixels, GameImage This_Image, List<int[]> This_Pos)
+        {
+            for (int i = 0; i < This_Pos.Count; i++)
+            {
+                GameUtils.DrawImageOnScreen(pixels, This_Image, new Point((int)(This_Pos[i][0]), (int)(This_Pos[i][1])));
+            }
         }
     }
 }
