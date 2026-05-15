@@ -23,14 +23,20 @@ namespace RetroGameDemo
         GameImage Spaceship_Image = new GameImage(
         new int[,]
         {
-            {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+            {0, 0, 0, 0, 0 ,1, 1, 0, 0, 0, 0, 0,},
+            {0, 0, 0, 0, 0 ,1, 1, 0, 0, 0, 0, 0,},
+            {0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0,},
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-            {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+            {0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0 },
+            {0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0 },
         },
         AnchorType.Center);
 
         int[] Spaceship_Pos;
         int[] Spaceship_Vel;
+        int[] Spaceship_Radius = new int[] { 6, 1 };
 
         // Projectile Image, position and speed
         GameImage Projectile_Image = new GameImage(
@@ -42,20 +48,21 @@ namespace RetroGameDemo
 
         List<int[]> Projectile_Pos = new List<int[]>();
         List<int[]> Projectile_Vel = new List<int[]>();
+        int[] Projectile_Radius = new int[] { 1, 1 };
 
         // Enemy Image, position and speed
         GameImage Enemy_Image = new GameImage(
         new int[,]
         {
-            {1, 1, 0, 1, 1},
-            {1, 1, 0, 1, 1},
-            {0, 0, 1, 0, 0},
-            {1, 1, 0, 1, 1},
-            {1, 1, 0, 1, 1}
+            {1, 0, 1},
+            {0, 1, 0},
+            {1, 0, 1},
         }, AnchorType.Center);
 
         List<int[]> Enemy_Pos = new List<int[]>();
         List<int[]> Enemy_Vel = new List<int[]>();
+        int[] Enemy_Radius = new int[] { 2, 2 };
+        int Enemy_Generation_Interval = 72;
 
         // Initialization call, used to customize GameConfig data (used to customize the engine behaviour)
         protected override void OnInitGameConfig(GameConfig GameConfig)
@@ -88,11 +95,7 @@ namespace RetroGameDemo
         // Here the actual logic happens.
         protected override void OnLoopGame(float deltaTime)
         {
-            if (FrameCount % 24 == 0)
-            {
-                Enemy_Pos.Add(new int[] { GameConfig.PixelsMatrixWidth / 2, GameConfig.PixelsMatrixHeight / 2 });
-                Enemy_Vel.Add(new int[] { 3, 2 });
-            }
+            Enemy_Generation();
 
             if (FrameCount == 0)
             {
@@ -100,32 +103,13 @@ namespace RetroGameDemo
             }
             else
             {
-                for (global::System.Int32 i = 0; i < Enemy_Pos.Count; i++)
-                {
-                    // DEMO: DA LEVARE
-                    if (Enemy_Pos[i][0] > GameConfig.PixelsMatrixWidth || Enemy_Pos[i][0] < 0)
-                    {
-                        Enemy_Vel[i][0] = -Enemy_Vel[i][0];
-                    }
-                    if (Enemy_Pos[i][1] > GameConfig.PixelsMatrixWidth || Enemy_Pos[i][1] < 0)
-                    {
-                        Enemy_Vel[i][1] = -Enemy_Vel[i][1];
-                    }
+                Despawn(Enemy_Pos, Enemy_Vel);
 
-                    Enemy_Pos[i][0] += Enemy_Vel[i][0];
-                    Enemy_Pos[i][1] += Enemy_Vel[i][1];
-                }
+                Movement(Enemy_Pos, Enemy_Vel);
 
-                for (global::System.Int32 i = 0; i < Projectile_Pos.Count; i++)
-                {
-                    Projectile_Pos[i][0] += Projectile_Vel[i][0];
-                    Projectile_Pos[i][1] += Projectile_Vel[i][1];
-                }
+                Movement(Projectile_Pos, Projectile_Vel);
 
-                if (Spaceship_Pos[0] < 10) Spaceship_Pos[0] = 7;
-                if (Spaceship_Pos[0] > GameConfig.PixelsMatrixWidth - 7) Spaceship_Pos[0] = GameConfig.PixelsMatrixWidth - 7;
-                if (Spaceship_Pos[1] < 3) Spaceship_Pos[1] = 3;
-                if (Spaceship_Pos[1] > GameConfig.PixelsMatrixHeight - 3) Spaceship_Pos[1] = GameConfig.PixelsMatrixHeight - 3;
+                Spaceship_Border(Spaceship_Pos, Spaceship_Vel);
             }
 
         }
@@ -158,7 +142,7 @@ namespace RetroGameDemo
         // Called the first frame a key is pressed, and not called anymore unless the key is released
         protected override void OnKeyDown(Keys KeyCode)
         {
-
+            Projectile_Shoot(KeyCode);
         }
 
         // Called if a key has been released (even in the same frame it has been released)
@@ -170,23 +154,85 @@ namespace RetroGameDemo
         // Called during the frame a key is pressed and in all the following frames until it's released (excluding the frame it's released)
         protected override void OnKeyPress(Keys KeyCode)
         {
-            if (KeyCode == Keys.W) Spaceship_Pos[1] -= 3;
-            if (KeyCode == Keys.A) Spaceship_Pos[0] -= 3;
-            if (KeyCode == Keys.S) Spaceship_Pos[1] += 3;
-            if (KeyCode == Keys.D) Spaceship_Pos[0] += 3;
+            Spaceship_Movement(KeyCode);
 
-            if (KeyCode == Keys.Space)
-            {
-                Projectile_Pos.Add(new int[] { Spaceship_Pos[0], Spaceship_Pos[1] });
-                Projectile_Vel.Add(new int[] { FrameCount % 2, FrameCount % 3 });
-            }
-            bool pausa = false;
+
+            bool Pause = false;
             if (KeyCode == Keys.P)
             {
-                pausa = !pausa;
-                SetPaused(pausa);
+                Pause = !Pause;
+                SetPaused(Pause);
             }
         }
 
+        void Spaceship_Movement(Keys KeyCode)
+        {
+            if (KeyCode == Keys.W) Spaceship_Pos[1] -= Spaceship_Vel[1];
+            if (KeyCode == Keys.A) Spaceship_Pos[0] -= Spaceship_Vel[0];
+            if (KeyCode == Keys.S) Spaceship_Pos[1] += Spaceship_Vel[1];
+            if (KeyCode == Keys.D) Spaceship_Pos[0] += Spaceship_Vel[1];
+        }
+
+        void Projectile_Shoot(Keys KeyCode)
+        {
+            if (KeyCode == Keys.Space)
+            {
+                Projectile_Pos.Add(new int[] { Spaceship_Pos[0], Spaceship_Pos[1] });
+                Projectile_Vel.Add(new int[] { 0, -2 }); // Da rendere flessibile
+            }
+        }
+        
+        void Enemy_Generation()
+        {
+            if (FrameCount % Enemy_Generation_Interval == 0)
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    Enemy_Pos.Add(new int[] { (int)(GameConfig.PixelsMatrixWidth * (2 * i + 1) / 12), (int)(5) });
+                    Enemy_Vel.Add(new int[] { 0, 1 }); // Velocità da cambiare in seguito
+                }
+            }
+        }
+
+        void Despawn(List<int[]> This_Pos, List<int[]> This_Vel)
+        {
+            for (global::System.Int32 i = 0; i < This_Pos.Count; i++)
+            {
+                if (This_Pos[i][0] > GameConfig.PixelsMatrixWidth || This_Pos[i][0] < 0 || This_Pos[i][1] > GameConfig.PixelsMatrixWidth || This_Pos[i][1] < 0)
+                {
+                    This_Pos.Remove(This_Pos[i]);
+                    This_Vel.Remove(This_Vel[i]);
+                }
+            }
+        }
+
+        void Movement(List<int[]> This_Pos, List<int[]> This_Vel)
+        {
+            for (int i = 0; i < This_Pos.Count; i++)
+            {
+                This_Pos[i][0] += This_Vel[i][0];
+                This_Pos[i][1] += This_Vel[i][1];
+            }
+        }
+        
+        void Spaceship_Border(int[] This_Pos, int[] This_Vel)
+        {
+            if (This_Pos[0] < 10) This_Pos[0] = 7;
+            if (This_Pos[0] > GameConfig.PixelsMatrixWidth - 7) This_Pos[0] = GameConfig.PixelsMatrixWidth - 7;
+            if (This_Pos[1] < 3) This_Pos[1] = 3;
+            if (This_Pos[1] > GameConfig.PixelsMatrixHeight - 3) This_Pos[1] = GameConfig.PixelsMatrixHeight - 3;
+        }
+
+        void Projectile_Collision(List<int[]> Projectile_Pos, int Projectile_Radius, List<int[]> Enemy_Pos, int[] Enemy_Radius)
+        {
+
+        }
+
+        bool Verify_Collision(List<int[]> First_Pos, int[] First_Radius, List<int[]> Second_Pos, int[] Second_Radius)
+        {
+
+
+            return false; // da levare
+        }
     }
 }
