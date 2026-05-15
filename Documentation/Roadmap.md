@@ -20,16 +20,16 @@ Questo progetto seguirà una roadmap, tramite cui verrà determinato il criterio
 
 ## Seconda settimana (da Lun 11/05 a Dom 17/05)
 - [ ] Gestione collisioni [--> Chigo127-Edu, Ale-Cioffo]
-    - [ ] Proiettili che vanno a segno [--> Chigo127-Edu]
-    - [ ] Ostacoli che finiscono sulla navicella [--> Ale-Cioffo]
+    - [x] Proiettili che vanno a segno [--> Chigo127-Edu]
+    - [x] Ostacoli che finiscono sulla navicella [--> Ale-Cioffo]
     - [ ] Ostacoli tralasciati [--> Ale-Cioffo]
 - [ ] Progresso [--> Chigo127-Edu, Ale-Cioffo]
     - [ ] Incremento spawn degli ostacoli [--> Chigo127-Edu]
     - [ ] Incremento velocità (opzionale) [--> Chigo127-Edu]
     - [ ] Spawn laterale di ostacoli (opzionale) [--> Ale-Cioffo]
 - [ ] Vite e clausola per fine gioco [--> Chigo127-Edu, Ale-Cioffo]
-    - [ ] Collegamento con le collisioni, determinazione vite [--> Chigo127-Edu]
-    - [ ] Al termine delle vite il gioco finisce [--> Chigo127-Edu]
+    - [x] Collegamento con le collisioni, determinazione vite [--> Chigo127-Edu]
+    - [x] Al termine delle vite il gioco finisce [--> Chigo127-Edu]
     - [ ] Il gioco è a permanenza (Come il chrome dino) e c’è un aumento graduale della difficoltà (progresso) [--> Ale-Cioffo]
 ######
 
