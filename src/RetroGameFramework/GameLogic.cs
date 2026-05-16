@@ -52,9 +52,9 @@ namespace RetroGameFramework
         public bool IsPaused() { return _paused; }
         public void SetPaused (bool paused) { _paused = paused; }
 
-        private int _frameCount = 0;
+        private static int _frameCount = 0;
         // Returns the total frames count from the start of the application. 
-        public int FrameCount { get { return _frameCount; } }
+        public static int FrameCount { get { return _frameCount; } }
 
         private int _frameCountRunning = 0;
         // Returns the frames count from the start of the application, excluding paused frames. 
@@ -72,14 +72,14 @@ namespace RetroGameFramework
         // Returns the elapsed paused time, in seconds, from the start of the application. 
         public float ElapsedTimePaused { get { return _elapsedTime - _elapsedTimeRunning; } }
 
-        private Random _randomGenerator;
-        public Random RandomGenerator { get { return _randomGenerator; } }
+        private static Random _randomGenerator;
+        public static Random RandomGenerator { get { return _randomGenerator; } }
 
         // CREATE GAME MATRIX
         static void Main(string[] args)
         {
             GameConfig GameConfig = new GameConfig();
-            GameLogic GameLogic = new RetroGameDemo.MyRetroGame(GameConfig);
+            GameLogic GameLogic = new SpaceInvaders.MyRetroGame(GameConfig);
             GameLogic.InitGameConfig(GameConfig);
 
             // The screen matrix is transposed, so the number of rows is equal to the width of the screen
@@ -184,8 +184,6 @@ namespace RetroGameFramework
             OnEndGame();
         }
         protected virtual void OnEndGame() { }
-
-
 
         private void EnableInput(Form gameForm)
         {

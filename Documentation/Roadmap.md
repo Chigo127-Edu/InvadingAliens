@@ -24,16 +24,16 @@ Questo progetto seguirà una roadmap, tramite cui verrà determinato il criterio
     - [x] Ostacoli che finiscono sulla navicella [--> Ale-Cioffo]
     - [ ] Ostacoli tralasciati [--> Ale-Cioffo]
 - [ ] Progresso [--> Chigo127-Edu, Ale-Cioffo]
-    - [ ] Incremento spawn degli ostacoli [--> Chigo127-Edu]
-    - [ ] Incremento velocità (opzionale) [--> Chigo127-Edu]
+    - [x] Incremento spawn degli ostacoli [--> Chigo127-Edu]
+    - [x] Incremento velocità (opzionale) [--> Chigo127-Edu]
     - [ ] Spawn laterale di ostacoli (opzionale) [--> Ale-Cioffo]
 - [ ] Vite e clausola per fine gioco [--> Chigo127-Edu, Ale-Cioffo]
     - [x] Collegamento con le collisioni, determinazione vite [--> Chigo127-Edu]
     - [x] Al termine delle vite il gioco finisce [--> Chigo127-Edu]
-    - [ ] Il gioco è a permanenza (Come il chrome dino) e c’è un aumento graduale della difficoltà (progresso) [--> Ale-Cioffo]
+    - [x] Il gioco è a permanenza (Come il chrome dino) e c’è un aumento graduale della difficoltà (progresso) [--> Ale-Cioffo]
 ######
 
 ## Terza settimana (da Lun 18/05 a Gio 21/05)
-- [ ] Gestione punteggio (in caso di n collisioni game over) [--> Chigo127-Edu]
+- [x] Gestione punteggio (in caso di n collisioni game over) [--> Chigo127-Edu]
 - [ ] Fix bug e abbellimento [--> Chigo127-Edu, Ale-Cioffo]
 - [ ] Cura finale del repository (es. Perfezionare i rilasci) [--> Chigo127-Edu, Ale-Cioffo]

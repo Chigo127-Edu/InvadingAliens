@@ -27,8 +27,8 @@ namespace RetroGameFramework
 {
     internal class GameConfig
     {
-        public int PixelsMatrixWidth = 50;
-        public int PixelsMatrixHeight = 50;
+        public static int PixelsMatrixWidth = 50;
+        public static int PixelsMatrixHeight = 50;
         public int PixelSize = 10;
 
         public int FrameRate = 30;
