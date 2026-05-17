@@ -79,7 +79,7 @@ namespace RetroGameFramework
         static void Main(string[] args)
         {
             GameConfig GameConfig = new GameConfig();
-            GameLogic GameLogic = new SpaceInvaders.MyRetroGame(GameConfig);
+            GameLogic GameLogic = new SpaceInvaders.SpaceInvaders(GameConfig);
             GameLogic.InitGameConfig(GameConfig);
 
             // The screen matrix is transposed, so the number of rows is equal to the width of the screen
@@ -178,7 +178,6 @@ namespace RetroGameFramework
         protected virtual void OnClear(int[,] pixels) { }
         protected virtual void OnLoopGame(float deltaTime) { }
         protected virtual void OnDraw(int[,] pixels) { }
-
         private void EndGame()
         {
             OnEndGame();

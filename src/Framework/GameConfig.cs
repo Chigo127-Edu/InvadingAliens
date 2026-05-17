@@ -31,7 +31,7 @@ namespace RetroGameFramework
         public static int PixelsMatrixHeight = 50;
         public int PixelSize = 10;
 
-        public int FrameRate = 30;
+        public int FrameRate = 12;
         
         public Color BackgroundColor = Color.Black;
         public Color ForegroundColor = Color.White;

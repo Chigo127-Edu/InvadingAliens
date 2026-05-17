@@ -6,18 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-/*
- * Aggiunta personale rispetto al RetroGameFramework Originale
- */
-namespace RetroGameFramework
+namespace SpaceInvaders
 {
     public class Writing
     {
         // Corners
         private static int[] TopLeft = new int[] { 1, 1 };
-        private static int[] TopRight = new int[] { GameConfig.PixelsMatrixWidth - 2, 1 };
-        private static int[] BottomLeft = new int[] { 1, GameConfig.PixelsMatrixHeight - 2 };
-        private static int[] BottomRight = new int[] { GameConfig.PixelsMatrixWidth - 2, GameConfig.PixelsMatrixHeight - 2 };
+        private static int[] TopRight = new int[] { RetroGameFramework.GameConfig.PixelsMatrixWidth - 2, 1 };
+        private static int[] BottomLeft = new int[] { 1, RetroGameFramework.GameConfig.PixelsMatrixHeight - 2 };
+        private static int[] BottomRight = new int[] { RetroGameFramework.GameConfig.PixelsMatrixWidth - 2, RetroGameFramework.GameConfig.PixelsMatrixHeight - 2 };
 
         // Char radius, like enemies and projectiles'
         private static int[] Char_Radius = new int[] { 2, 3 };
@@ -33,43 +30,43 @@ namespace RetroGameFramework
 
         // Print the string onto the screen. Currently, only the top sides are supported,
         // and carriage return is supported only for the top left
-        public static void Print(int[,] pixels, string Value, string Corner)
+        public static void Print(int[,] pixels, string Value, int Corner)
         {
             switch (Corner)
             {
-                case "TopLeft":
+                case 0:
                     {
                         int OffsetX = 0;
                         int OffsetY = 0;
                         for (int i = 0; i < Value.Length; i++)
                         {
                             if (Value[i] == '\r' && Value[i + 1] == '\n' || Value[i] == '\n' && Value[i + 1] == '\r') { OffsetX = -2; OffsetY += 8; }
-                            Draw.Element(pixels, Chars[GetChar(Value[i])], new int[] { TopLeft[0] + (6 * OffsetX) + Char_Radius[0], TopLeft[1] + Char_Radius[1] + OffsetY });
+                            Draw.Element(pixels, new int[] { TopLeft[0] + (6 * OffsetX) + Char_Radius[0], TopLeft[1] + Char_Radius[1] + OffsetY}, Chars[GetChar(Value[i])] );
                             OffsetX++;
                         }
                     }
                     break;
-                case "TopRight":
+                case 1:
                     {
                         for (int i = 0; i < Value.Length; i++)
                         {
-                            Draw.Element(pixels, Chars[GetChar(Value[Value.Length - i - 1])], new int[] { TopRight[0] - (6 * i) - Char_Radius[0], TopRight[1] + Char_Radius[1] });
+                            Draw.Element(pixels, new int[] { TopRight[0] - (6 * i) - Char_Radius[0], TopRight[1] + Char_Radius[1] }, Chars[GetChar(Value[Value.Length - i - 1])] );
                         }
                     }
                     break;
-                case "BottomLeft":
+                case 2:
                     {
                         for (int i = 0; i < Value.Length; i++)
                         {
-                            Draw.Element(pixels, Chars[GetChar(Value[i])], new int[] { BottomLeft[0] + 6 * i + Char_Radius[0], BottomLeft[1] - Char_Radius[1] });
+                            Draw.Element(pixels, new int[] { BottomLeft[0] + 6 * i + Char_Radius[0], BottomLeft[1] - Char_Radius[1] }, Chars[GetChar(Value[i])]);
                         }
                     }
                     break;
-                case "BottomRight":
+                case 3:
                     {
                         for (int i = 0; i < Value.Length; i++)
                         {
-                            Draw.Element(pixels, Chars[GetChar(Value[Value.Length - i - 1])], new int[] { BottomRight[0] - (6 * i) - Char_Radius[0], BottomRight[1] - Char_Radius[1] });
+                            Draw.Element(pixels, new int[] { BottomRight[0] - (6 * i) - Char_Radius[0], BottomRight[1] - Char_Radius[1] }, Chars[GetChar(Value[Value.Length - i - 1])]);
                         }
                     }
                     break;
@@ -78,10 +75,10 @@ namespace RetroGameFramework
             }
         }
 
-        // An overwhelming array containing capital letters, numbers and some symbols, as gameImages
-        private static GameImage[] Chars = new GameImage[]
+        // An overwhelming array containing capital letters, numbers and some symbols, as RetroGameFramework.RetroGameFramework.GameImages
+        private static RetroGameFramework.GameImage[] Chars = new RetroGameFramework.GameImage[]
         {
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -89,9 +86,9 @@ namespace RetroGameFramework
             "     ",
             "     ",
             "     ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "  *  ",
             "  *  ",
             "  *  ",
@@ -99,9 +96,9 @@ namespace RetroGameFramework
             "  *  ",
             "     ",
             "  *  ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-                    GameImage.CreateFromRows(new string[] {
+                    RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " * * ",
             " * * ",
             " * * ",
@@ -109,9 +106,9 @@ namespace RetroGameFramework
             "     ",
             "     ",
             "     ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " * * ",
             " * * ",
             "*****",
@@ -119,9 +116,9 @@ namespace RetroGameFramework
             "*****",
             " * * ",
             " * * ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "  *  ",
             " ****",
             "* *  ",
@@ -129,9 +126,9 @@ namespace RetroGameFramework
             "  * *",
             "**** ",
             "  *  ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "**  *",
             "**  *",
             "   * ",
@@ -139,9 +136,9 @@ namespace RetroGameFramework
             " *   ",
             "*  **",
             "*  **",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " **  ",
             "*  * ",
             " **  ",
@@ -149,9 +146,9 @@ namespace RetroGameFramework
             "*  * ",
             "*  * ",
             " ** *",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "  *  ",
             "  *  ",
             "  *  ",
@@ -159,9 +156,9 @@ namespace RetroGameFramework
             "     ",
             "     ",
             "     ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "   * ",
             "  *  ",
             " *   ",
@@ -169,8 +166,8 @@ namespace RetroGameFramework
             " *   ",
             "  *  ",
             "   * ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
-        GameImage.CreateFromRows(new string[] {
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *   ",
             "  *  ",
             "   * ",
@@ -178,9 +175,9 @@ namespace RetroGameFramework
             "   * ",
             "  *  ",
             " *   ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "  *  ",
             "* * *",
@@ -188,9 +185,9 @@ namespace RetroGameFramework
             "* * *",
             "  *  ",
             "     ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "  *  ",
             "  *  ",
@@ -198,9 +195,9 @@ namespace RetroGameFramework
             "  *  ",
             "  *  ",
             "     ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -208,9 +205,9 @@ namespace RetroGameFramework
             "   * ",
             "   *  ",
             " **  ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -218,9 +215,9 @@ namespace RetroGameFramework
             "     ",
             "     ",
             "     ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -228,9 +225,9 @@ namespace RetroGameFramework
             "     ",
             "     ",
             "  *  ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "    *",
             "    *",
             "   * ",
@@ -238,9 +235,9 @@ namespace RetroGameFramework
             " *   ",
             "*    ",
             "*    ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*  **",
@@ -248,9 +245,9 @@ namespace RetroGameFramework
             "**  *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "  *  ",
             " **  ",
             "* *  ",
@@ -258,9 +255,9 @@ namespace RetroGameFramework
             "  *  ",
             "  *  ",
             "*****",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "    *",
@@ -268,9 +265,9 @@ namespace RetroGameFramework
             "*    ",
             "*    ",
             "*****",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "    *",
@@ -278,9 +275,9 @@ namespace RetroGameFramework
             "    *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "  ** ",
             " * * ",
             "*  * ",
@@ -288,9 +285,9 @@ namespace RetroGameFramework
             "*****",
             "   * ",
             "   * ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "*    ",
             "**** ",
@@ -298,9 +295,9 @@ namespace RetroGameFramework
             "    *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*    ",
             "*    ",
@@ -308,9 +305,9 @@ namespace RetroGameFramework
             "*   *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "*   *",
             "    *",
@@ -318,9 +315,9 @@ namespace RetroGameFramework
             "  *  ",
             " *   ",
             "*    ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -328,9 +325,9 @@ namespace RetroGameFramework
             "*   *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -338,9 +335,9 @@ namespace RetroGameFramework
             "    *",
             "    *",
             " *** ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-                    GameImage.CreateFromRows(new string[] {
+                    RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -348,9 +345,9 @@ namespace RetroGameFramework
             "     ",
             "     ",
             "  *  ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -358,9 +355,9 @@ namespace RetroGameFramework
             "     ",
             "   * ",
             " **  ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "   **",
             " **  ",
@@ -368,9 +365,9 @@ namespace RetroGameFramework
             " **  ",
             "   **",
             "     ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "*****",
@@ -378,9 +375,9 @@ namespace RetroGameFramework
             "*****",
             "     ",
             "     ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "**   ",
             "  ** ",
@@ -388,9 +385,9 @@ namespace RetroGameFramework
             "  ** ",
             "**   ",
             "     ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "   * ",
@@ -398,9 +395,9 @@ namespace RetroGameFramework
             "  *  ",
             "     ",
             "  *  ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "* ***",
@@ -408,9 +405,9 @@ namespace RetroGameFramework
             "*    ",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -418,9 +415,9 @@ namespace RetroGameFramework
             "*   *",
             "*   *",
             "*   *",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "**** ",
             "*   *",
             "*   *",
@@ -428,9 +425,9 @@ namespace RetroGameFramework
             "*   *",
             "*   *",
             "**** ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*    ",
@@ -438,9 +435,9 @@ namespace RetroGameFramework
             "*    ",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "**** ",
             "*   *",
             "*   *",
@@ -448,9 +445,9 @@ namespace RetroGameFramework
             "*   *",
             "*   *",
             "**** ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "*    ",
             "*    ",
@@ -458,9 +455,9 @@ namespace RetroGameFramework
             "*    ",
             "*    ",
             "*****",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "*    ",
             "*    ",
@@ -468,9 +465,9 @@ namespace RetroGameFramework
             "*    ",
             "*    ",
             "*    ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*    ",
@@ -478,9 +475,9 @@ namespace RetroGameFramework
             "*   *",
             "*   *",
             " ****",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             "*   *",
@@ -488,9 +485,9 @@ namespace RetroGameFramework
             "*   *",
             "*   *",
             "*   *",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "  *  ",
             "  *  ",
@@ -498,9 +495,9 @@ namespace RetroGameFramework
             "  *  ",
             "  *  ",
             "*****",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "   * ",
             "   * ",
@@ -508,9 +505,9 @@ namespace RetroGameFramework
             "   * ",
             "*  * ",
             " **  ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "*  * ",
             "* *  ",
@@ -518,9 +515,9 @@ namespace RetroGameFramework
             "* *  ",
             "*  * ",
             "*   *",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*    ",
             "*    ",
             "*    ",
@@ -528,9 +525,9 @@ namespace RetroGameFramework
             "*    ",
             "*    ",
             "*****",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-            GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "** **",
             "* * *",
@@ -538,9 +535,9 @@ namespace RetroGameFramework
             "*   *",
             "*   *",
             "*   *",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "**  *",
             "* * *",
@@ -548,9 +545,9 @@ namespace RetroGameFramework
             "*   *",
             "*   *",
             "*   *",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -558,9 +555,9 @@ namespace RetroGameFramework
             "*   *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "**** ",
             "*   *",
             "*   *",
@@ -568,9 +565,9 @@ namespace RetroGameFramework
             "*    ",
             "*    ",
             "*    ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -578,9 +575,9 @@ namespace RetroGameFramework
             "* * *",
             "*  * ",
             " ** *",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "**** ",
             "*   *",
             "*   *",
@@ -588,9 +585,9 @@ namespace RetroGameFramework
             "* *  ",
             "*  * ",
             "*   *",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " ****",
             "*    ",
             "*    ",
@@ -598,9 +595,9 @@ namespace RetroGameFramework
             "    *",
             "    *",
             "**** ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "  *  ",
             "  *  ",
@@ -608,9 +605,9 @@ namespace RetroGameFramework
             "  *  ",
             "  *  ",
             "  *  ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-                GameImage.CreateFromRows(new string[] {
+                RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             "*   *",
@@ -618,9 +615,9 @@ namespace RetroGameFramework
             "*   *",
             "*   *",
             " ***",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             "*   *",
@@ -628,9 +625,9 @@ namespace RetroGameFramework
             "*   *",
             " * * ",
             "  * ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             "*   *",
@@ -638,9 +635,9 @@ namespace RetroGameFramework
             "* * *",
             "* * *",
             " * * ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             " * * ",
@@ -648,9 +645,9 @@ namespace RetroGameFramework
             " * * ",
             "*   *",
             "*   *",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             " * * ",
@@ -658,9 +655,9 @@ namespace RetroGameFramework
             "  *  ",
             "  *  ",
             "  *  ",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        GameImage.CreateFromRows(new string[] {
+        RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "    *",
             "   * ",
@@ -668,7 +665,7 @@ namespace RetroGameFramework
             " *   ",
             "*    ",
             "*****",
-        }, new char[] { ' ', '*' }, AnchorType.Center),
+        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
         };
 
     }
