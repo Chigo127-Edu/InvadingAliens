@@ -17,6 +17,7 @@ namespace SpaceInvaders
         Bottom_Left,
         Bottom_Right
     };
+
     internal class SpaceInvaders : GameLogic
     {
         public SpaceInvaders(GameConfig GameConfig) : base(GameConfig) { }
@@ -32,6 +33,8 @@ namespace SpaceInvaders
 
         // Game Difficulty
         public static float Difficulty = 1f;
+
+        // It's different from Framecount because it stops when paused
         public static int FramesPlayed = 0;
 
         // Game score
@@ -77,8 +80,8 @@ namespace SpaceInvaders
         // It's main purpose it's to setup the scene.
         private void FirstFrameLoop()
         {
-            // Defining spaceship position and potential speed
-
+            Spaceship.Style.Shooting_Style.SetColorRemap(3, 3);
+            Spaceship.Style.Attacked_Style.SetColorRemap(2, 2);
         }
 
         // Called once per frame, BEFORE the OnLoopGame event.
@@ -96,7 +99,7 @@ namespace SpaceInvaders
                 FramesPlayed += 1;
             }
             // Game difficulty is the square root of the framecount
-            Difficulty = 1 * (float)Math.Sqrt(FramesPlayed);
+            Difficulty = (float)Math.Sqrt(FramesPlayed);
 
             // Logic when the game is ongoing
             if (OnGoing)
@@ -123,7 +126,7 @@ namespace SpaceInvaders
                     Collisions.SpaceshipAttacked(Enemies);
 
                     // If the player runs out of lives, the game will end
-                    if (Lives < 0) OnGoing = false;
+                    if (Lives < 1) OnGoing = false;
 
                     // Enemies will move automatically, like existing projectiles
                     Movement.ElementsType(Enemies);
@@ -157,8 +160,8 @@ namespace SpaceInvaders
                 if (IsPaused()) Writing.Print(pixels, "Paused", (int)Corners.Bottom_Left);
 
                 // Every projectile and every enemy will be drawn
-                Draw.AllElements(pixels, Enemies, Enemy.Image);
-                Draw.AllElements(pixels, Projectiles, Projectile.Image);
+                Draw.AllElements(pixels, Enemies, Enemy.Image, Enemy.Style);
+                Draw.AllElements(pixels, Projectiles, Projectile.Image, Enemy.Style);
 
                 // Draw the spaceship differently, depending on the state
                 Spaceship.Style.Draw(pixels, Spaceship.Position);
@@ -231,11 +234,11 @@ namespace SpaceInvaders
     public class Draw
     {
         // All the elements of the same type (Like projectiles and enemies) can be drawn in one cycle
-        public static void AllElements(int[,] pixels, List<Element> This, GameImage Image)
+        public static void AllElements(int[,] pixels, List<Element> This, GameImage Image, PaintStyle Style)
         {
             for (int i = 0; i < This.Count; i++)
             {
-                GameUtils.DrawImageOnScreen(pixels, Image, new Point((int)(This[i].Position[0]), (int)(This[i].Position[1])));
+                GameUtils.DrawImageOnScreen(pixels, Image, new Point((int)(This[i].Position[0]), (int)(This[i].Position[1])), Style);
             }
         }
 
@@ -424,6 +427,7 @@ namespace SpaceInvaders
             "  **     **  ",
             "  **     **  "
         }, new char[] { ' ', '*', '$', '.' }, AnchorType.Center);
+            public static PaintStyle Normal_Style = PaintStyle.Default;
 
             public static GameImage Attacked = GameImage.CreateFromRows(new string[]
             {
@@ -436,6 +440,8 @@ namespace SpaceInvaders
             "  $$     $$  ",
             "  $$     $$  "
             }, new char[] { ' ', '*', '$', '.' }, AnchorType.Center);
+            public static PaintStyle Attacked_Style = PaintStyle.Default;
+
 
             public static GameImage Shooting = GameImage.CreateFromRows(new string[] {
             "     ...     ",
@@ -447,23 +453,24 @@ namespace SpaceInvaders
             "  **     **  ",
             "  **     **  "
         }, new char[] { ' ', '*', '$', '.', ',' }, AnchorType.Center);
+            public static PaintStyle Shooting_Style = PaintStyle.Default;
 
             // Drawing depending on the state
             public static void Draw(int[,] pixels, int[] Spaceship_Pos)
             {
                 if (Spaceship.isAttacked)
                 {
-                    GameUtils.DrawImageOnScreen(pixels, Style.Attacked, new Point((int)(Spaceship.Position[0]), (int)(Spaceship.Position[1])));
+                    GameUtils.DrawImageOnScreen(pixels, Style.Attacked, new Point((int)(Spaceship.Position[0]), (int)(Spaceship.Position[1])), Attacked_Style);
                     Spaceship.isAttacked = false;
                 }
                 else if (Spaceship.isShooting)
                 {
-                    GameUtils.DrawImageOnScreen(pixels, Style.Shooting, new Point((int)(Spaceship.Position[0]), (int)(Spaceship.Position[1])));
+                    GameUtils.DrawImageOnScreen(pixels, Style.Shooting, new Point((int)(Spaceship.Position[0]), (int)(Spaceship.Position[1])), Shooting_Style);
                     Spaceship.isShooting = false;
                 }
                 else
                 {
-                    GameUtils.DrawImageOnScreen(pixels, Style.Normal, new Point((int)(Spaceship.Position[0]), (int)(Spaceship.Position[1])));
+                    GameUtils.DrawImageOnScreen(pixels, Style.Normal, new Point((int)(Spaceship.Position[0]), (int)(Spaceship.Position[1])), Normal_Style);
                 }
             }
         }
@@ -484,6 +491,7 @@ namespace SpaceInvaders
             {1}
         },
         AnchorType.Center);
+        public static PaintStyle Style = PaintStyle.Default;
     }
 
     public class Enemy
@@ -499,6 +507,7 @@ namespace SpaceInvaders
             {0, 1, 0},
             {1, 0, 1},
         }, AnchorType.Center);
+        public static PaintStyle Style = PaintStyle.Default;
     }
 
 }
