@@ -1,4 +1,4 @@
-﻿using SpaceInvaders;
+using SpaceInvaders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +41,7 @@ namespace SpaceInvaders
                         for (int i = 0; i < Value.Length; i++)
                         {
                             if (Value[i] == '\r' && Value[i + 1] == '\n' || Value[i] == '\n' && Value[i + 1] == '\r') { OffsetX = -2; OffsetY += 8; }
-                            Draw.Element(pixels, new int[] { TopLeft[0] + (6 * OffsetX) + Char_Radius[0], TopLeft[1] + Char_Radius[1] + OffsetY}, Chars[GetChar(Value[i])] );
+                            Draw.Element(pixels, new int[] { TopLeft[0] + (6 * OffsetX) + Char_Radius[0], TopLeft[1] + Char_Radius[1] + OffsetY }, Chars[GetChar(Value[i])]);
                             OffsetX++;
                         }
                     }
@@ -50,7 +50,7 @@ namespace SpaceInvaders
                     {
                         for (int i = 0; i < Value.Length; i++)
                         {
-                            Draw.Element(pixels, new int[] { TopRight[0] - (6 * i) - Char_Radius[0], TopRight[1] + Char_Radius[1] }, Chars[GetChar(Value[Value.Length - i - 1])] );
+                            Draw.Element(pixels, new int[] { TopRight[0] - (6 * i) - Char_Radius[0], TopRight[1] + Char_Radius[1] }, Chars[GetChar(Value[Value.Length - i - 1])]);
                         }
                     }
                     break;
@@ -98,7 +98,7 @@ namespace SpaceInvaders
             "  *  ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-                    RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " * * ",
             " * * ",
             " * * ",
@@ -118,7 +118,7 @@ namespace SpaceInvaders
             " * * ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "  *  ",
             " ****",
             "* *  ",
@@ -128,7 +128,7 @@ namespace SpaceInvaders
             "  *  ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "**  *",
             "**  *",
             "   * ",
@@ -138,7 +138,7 @@ namespace SpaceInvaders
             "*  **",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " **  ",
             "*  * ",
             " **  ",
@@ -148,7 +148,7 @@ namespace SpaceInvaders
             " ** *",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "  *  ",
             "  *  ",
             "  *  ",
@@ -158,7 +158,7 @@ namespace SpaceInvaders
             "     ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "   * ",
             "  *  ",
             " *   ",
@@ -167,7 +167,8 @@ namespace SpaceInvaders
             "  *  ",
             "   * ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *   ",
             "  *  ",
             "   * ",
@@ -197,7 +198,7 @@ namespace SpaceInvaders
             "     ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -207,7 +208,7 @@ namespace SpaceInvaders
             " **  ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -217,7 +218,7 @@ namespace SpaceInvaders
             "     ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -227,7 +228,7 @@ namespace SpaceInvaders
             "  *  ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "    *",
             "    *",
             "   * ",
@@ -237,7 +238,7 @@ namespace SpaceInvaders
             "*    ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*  **",
@@ -267,7 +268,7 @@ namespace SpaceInvaders
             "*****",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "    *",
@@ -277,7 +278,7 @@ namespace SpaceInvaders
             " *** ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "  ** ",
             " * * ",
             "*  * ",
@@ -287,7 +288,7 @@ namespace SpaceInvaders
             "   * ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "*    ",
             "**** ",
@@ -297,7 +298,7 @@ namespace SpaceInvaders
             " *** ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*    ",
             "*    ",
@@ -307,7 +308,7 @@ namespace SpaceInvaders
             " *** ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "*   *",
             "    *",
@@ -317,7 +318,7 @@ namespace SpaceInvaders
             "*    ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -327,7 +328,7 @@ namespace SpaceInvaders
             " *** ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -337,7 +338,7 @@ namespace SpaceInvaders
             " *** ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-                    RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -377,7 +378,7 @@ namespace SpaceInvaders
             "     ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "     ",
             "**   ",
             "  ** ",
@@ -387,7 +388,7 @@ namespace SpaceInvaders
             "     ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "   * ",
@@ -397,7 +398,7 @@ namespace SpaceInvaders
             "  *  ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "* ***",
@@ -407,7 +408,7 @@ namespace SpaceInvaders
             " *** ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -437,7 +438,7 @@ namespace SpaceInvaders
             " *** ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "**** ",
             "*   *",
             "*   *",
@@ -447,7 +448,7 @@ namespace SpaceInvaders
             "**** ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "*    ",
             "*    ",
@@ -457,7 +458,7 @@ namespace SpaceInvaders
             "*****",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "*    ",
             "*    ",
@@ -467,7 +468,7 @@ namespace SpaceInvaders
             "*    ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*    ",
@@ -477,7 +478,7 @@ namespace SpaceInvaders
             " ****",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             "*   *",
@@ -487,7 +488,7 @@ namespace SpaceInvaders
             "*   *",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "  *  ",
             "  *  ",
@@ -497,7 +498,7 @@ namespace SpaceInvaders
             "*****",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "   * ",
             "   * ",
@@ -537,7 +538,7 @@ namespace SpaceInvaders
             "*   *",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "**  *",
             "* * *",
@@ -547,7 +548,7 @@ namespace SpaceInvaders
             "*   *",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -557,7 +558,7 @@ namespace SpaceInvaders
             " *** ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "**** ",
             "*   *",
             "*   *",
@@ -567,7 +568,7 @@ namespace SpaceInvaders
             "*    ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -577,7 +578,7 @@ namespace SpaceInvaders
             " ** *",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "**** ",
             "*   *",
             "*   *",
@@ -587,7 +588,7 @@ namespace SpaceInvaders
             "*   *",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             " ****",
             "*    ",
             "*    ",
@@ -597,7 +598,7 @@ namespace SpaceInvaders
             "**** ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "  *  ",
             "  *  ",
@@ -607,7 +608,7 @@ namespace SpaceInvaders
             "  *  ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-                RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             "*   *",
@@ -617,7 +618,7 @@ namespace SpaceInvaders
             " ***",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             "*   *",
@@ -627,7 +628,7 @@ namespace SpaceInvaders
             "  * ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             "*   *",
@@ -637,7 +638,7 @@ namespace SpaceInvaders
             " * * ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             " * * ",
@@ -647,7 +648,7 @@ namespace SpaceInvaders
             "*   *",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             " * * ",
@@ -657,7 +658,7 @@ namespace SpaceInvaders
             "  *  ",
         }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
 
-        RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            RetroGameFramework.GameImage.CreateFromRows(new string[] {
             "*****",
             "    *",
             "   * ",
