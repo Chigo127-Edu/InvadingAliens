@@ -27,7 +27,7 @@ Questo progetto seguirà una roadmap, tramite cui verrà determinato il criterio
     - [x] Incremento spawn degli ostacoli [--> Chigo127-Edu]
     - [x] Incremento velocità (opzionale) [--> Chigo127-Edu]
     - [ ] Spawn laterale di ostacoli (opzionale) [--> Ale-Cioffo]
-- [ ] Vite e clausola per fine gioco [--> Chigo127-Edu, Ale-Cioffo]
+- [x] Vite e clausola per fine gioco [--> Chigo127-Edu, Ale-Cioffo]
     - [x] Collegamento con le collisioni, determinazione vite [--> Chigo127-Edu]
     - [x] Al termine delle vite il gioco finisce [--> Chigo127-Edu]
     - [x] Il gioco è a permanenza (Come il chrome dino) e c’è un aumento graduale della difficoltà (progresso) [--> Ale-Cioffo]
