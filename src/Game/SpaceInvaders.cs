@@ -75,13 +75,19 @@ namespace SpaceInvaders
                 System.Drawing.Color.Violet,
            };
         }
-
+        private void StartNewGame()
+        {
+            OnGoing = true;
+        }
+        
         // Called at the start of the first frame of the game.
         // It's main purpose it's to setup the scene.
         private void FirstFrameLoop()
         {
-            Spaceship.Style.Shooting_Style.SetColorRemap(3, 3);
-            Spaceship.Style.Attacked_Style.SetColorRemap(2, 2);
+            var menu = new SimpleMenu(new[] { "Nuova Partita", "Esci" });
+            int choice = menu.MostraMenu();
+            if (choice == 0) StartNewGame();
+            else if (choice == 1) Environment.Exit(0);
         }
 
         // Called once per frame, BEFORE the OnLoopGame event.
