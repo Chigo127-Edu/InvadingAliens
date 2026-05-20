@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +12,7 @@ namespace SpaceInvaders
     {
         private string[] option;
         private int selected = 0;
-        public string TestoInizio = "Ciao Giocatore1 Benvenuto in SpaceInvaders !!";
+        public string TestoInizio = "Ciao Giocatore! Benvenuto in SpaceInvaders !!";
         private bool controllo = false;
 
         public SimpleMenu(string[] entries)

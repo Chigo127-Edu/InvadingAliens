@@ -5,7 +5,7 @@ Questo progetto seguirà una roadmap, tramite cui verrà determinato il criterio
 
 ## Indice
 - [x] Prima settimana: Creazione modelli, movimento
-- [ ] Seconda settimana: Logica del gioco e gestione collisioni
+- [x] Seconda settimana: Logica del gioco e gestione collisioni
 - [ ] Terza settimana: Perfezionamento e rifinitura
 ######
 
@@ -19,11 +19,11 @@ Questo progetto seguirà una roadmap, tramite cui verrà determinato il criterio
 ######
 
 ## Seconda settimana (da Lun 11/05 a Dom 17/05)
-- [ ] Gestione collisioni [--> Chigo127-Edu, Ale-Cioffo]
+- [x] Gestione collisioni [--> Chigo127-Edu, Ale-Cioffo]
     - [x] Proiettili che vanno a segno [--> Chigo127-Edu]
     - [x] Ostacoli che finiscono sulla navicella [--> Ale-Cioffo]
-    - [ ] Ostacoli tralasciati [--> Ale-Cioffo]
-- [ ] Progresso [--> Chigo127-Edu, Ale-Cioffo]
+    - [x] Ostacoli tralasciati [--> Ale-Cioffo]
+- [x] Progresso [--> Chigo127-Edu, Ale-Cioffo]
     - [x] Incremento spawn degli ostacoli [--> Chigo127-Edu]
     - [x] Incremento velocità (opzionale) [--> Chigo127-Edu]
     - [ ] Spawn laterale di ostacoli (opzionale) [--> Ale-Cioffo]
@@ -35,5 +35,5 @@ Questo progetto seguirà una roadmap, tramite cui verrà determinato il criterio
 
 ## Terza settimana (da Lun 18/05 a Gio 21/05)
 - [x] Gestione punteggio (in caso di n collisioni game over) [--> Chigo127-Edu]
-- [ ] Fix bug e abbellimento [--> Chigo127-Edu, Ale-Cioffo]
-- [ ] Cura finale del repository (es. Perfezionare i rilasci) [--> Chigo127-Edu, Ale-Cioffo]
+- [x] Fix bug e abbellimento [--> Chigo127-Edu, Ale-Cioffo]
+- [ ] Cura finale del repository (es. Documentazione del gioco) [--> Chigo127-Edu, Ale-Cioffo]

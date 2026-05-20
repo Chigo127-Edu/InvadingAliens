@@ -79,7 +79,7 @@ namespace RetroGameFramework
         static void Main(string[] args)
         {
             GameConfig GameConfig = new GameConfig();
-            GameLogic GameLogic = new SpaceInvaders.SpaceInvaders(GameConfig);
+            GameLogic GameLogic = new SpaceInvaders.Game(GameConfig);
             GameLogic.InitGameConfig(GameConfig);
 
             // The screen matrix is transposed, so the number of rows is equal to the width of the screen
