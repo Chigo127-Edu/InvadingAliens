@@ -53,8 +53,9 @@
     </Compile>
     <Compile Include="src\Framework\GameLogic.cs" />
     <Compile Include="src\Framework\GameImage.cs" />
+    <Compile Include="src\Game\Drawing.cs" />
     <Compile Include="src\Game\Menu.cs" />
-    <Compile Include="src\Game\SpaceInvaders.cs" />
+    <Compile Include="src\Game\Game.cs" />
     <Compile Include="src\Framework\GameUtils.cs" />
     <Compile Include="src\Framework\ImageLoader.cs" />
     <Compile Include="src\Framework\PaintStyle.cs" />

@@ -6,13 +6,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SpaceInvaders
+namespace InvadingAliens
 {
     public class SimpleMenu
     {
         private string[] option;
         private int selected = 0;
-        public string TestoInizio = "Ciao Giocatore! Benvenuto in SpaceInvaders !!";
+        public string TestoInizio = "Ciao Giocatore! Benvenuto su InvadingAliens!!";
         private bool controllo = false;
 
         public SimpleMenu(string[] entries)

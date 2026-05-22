@@ -9,8 +9,9 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 
-namespace SpaceInvaders
+namespace InvadingAliens
 {
+    // Enumerator for screen corners. This is useful for writing
     enum Corners
     {
         Top_Left,
@@ -19,6 +20,7 @@ namespace SpaceInvaders
         Bottom_Right
     };
 
+    // Enumerator for enemy types. 
     enum Enemy_Type
     {
         Normal,
@@ -38,10 +40,10 @@ namespace SpaceInvaders
         // GAME DATA
         // Declare here game-specific data that should survive the frame
 
-        // Game Difficulty
+        // Game Level
         public static int Level = 1;
 
-        // It's different from Framecount because it stops when paused
+        // It's different from Framecount because this doesn't increase when the game is paused
         public static int FramesPlayed = 0;
 
         // Game score
@@ -53,10 +55,10 @@ namespace SpaceInvaders
         // Boolean if the game is ongoing
         public static bool OnGoing = true;
 
-        // Boolean to order pause
+        // Boolean to request pause
         public static bool ToBePaused = false;
 
-        // Lists of objects for projectiles and enemies
+        // Lists of objects for projectiles, bosses and enemies
         public static List<Element> Projectiles = new List<Element>();
         public static List<Element> Enemies = new List<Element>();
         public static List<Element> Bosses = new List<Element>();
@@ -64,7 +66,7 @@ namespace SpaceInvaders
         // Initialization call, used to customize GameConfig data (used to customize the engine behaviour)
         protected override void OnInitGameConfig(GameConfig GameConfig)
         {
-            GameConfig.Title = "SpaceInvaders";
+            GameConfig.Title = "InvadingAliens";
             GameConfig.PixelsMatrixWidth = 160;
             GameConfig.PixelsMatrixHeight = 120;
             GameConfig.PixelSize = 5;
@@ -92,6 +94,7 @@ namespace SpaceInvaders
         // It's main purpose it's to setup the scene.
         private void FirstFrameLoop()
         {
+            // Before the game starts, the console menu is used instead
             var menu = new SimpleMenu(new[] { "Nuova Partita", "Esci" });
             int choice = menu.MostraMenu();
             if (choice == 0) StartNewGame();
@@ -100,9 +103,6 @@ namespace SpaceInvaders
             Spaceship.Subject.Style.Shooting_Style.SetColorRemap(3, 3);
             Spaceship.Subject.Style.Attacked_Style.SetColorRemap(2, 2);
             Spaceship.Projectile.Style.SetColorRemap(1, 5);
-
-            Enemy.Projectile.Style.SetColorRemap(1, 3);
-            Boss.Projectile.Style.SetColorRemap(3, 3);
         }
 
         // Called once per frame, BEFORE the OnLoopGame event.
@@ -115,6 +115,7 @@ namespace SpaceInvaders
         // Here the actual logic happens.
         protected override void OnLoopGame(float deltaTime)
         {
+            // Increase frames playes only if not paused. This avoids extreme difficulty after resuming
             if (!IsPaused())
             {
                 FramesPlayed += 1;
@@ -134,23 +135,26 @@ namespace SpaceInvaders
                     // Enemies are generated
                     Generation.Enemies();
 
-                    // Enemies and projectiles that go out the player's sight (The window) will be deleted
+                    // projectiles that go out the player's sight (The window) will be deleted
+                    // The player loses lives if they forget enemies and bosses, letting they pass the bottom part of the screen
                     Collisions.ForgottenEnemies(Enemies);
                     Collisions.ForgottenEnemies(Bosses);
                     Generation.Despawn(Projectiles);
 
-                    // Checking for collisions, between projectiles and enemies. If yes, both will be deleted and the score will increase
+                    // Checking for collisions, between projectiles, enemies, bosses. If yes, both the projectile and the enemy will be deleted and the score will increase
                     Collisions.EnemyShot(Enemies, Enemy.Subject.Range, Projectiles, Spaceship.Projectile.Range, (int) Enemy_Type.Normal);
                     Collisions.EnemyShot(Bosses, Boss.Subject.Range, Projectiles, Spaceship.Projectile.Range, (int) Enemy_Type.Boss);
 
-                    // Checking for collisions, between enemies and the spaceship. If yes, the enemy will be deleted and the spaceship will lose one life
+                    // Checking for collisions, between enemies and the spaceship.
+                    // If yes, the enemy will be deleted and the spaceship will lose
+                    // the amoput of lives the enemy had
                     Collisions.SpaceshipAttacked(Enemies);
                     Collisions.SpaceshipAttacked(Bosses);
 
                     // If the player runs out of lives, the game will end
                     if (Lives < 1) OnGoing = false;
 
-                    // Enemies will move automatically, like existing projectiles
+                    // Enemies, bosses and projectiles will move automatically
                     Movement.ElementsType(Enemies);
                     Movement.ElementsType(Bosses);
                     Movement.ElementsType(Projectiles);
@@ -164,6 +168,7 @@ namespace SpaceInvaders
                 OnEndGame();
             }
 
+            // Bool ToBePaused, because before the actual pause, "Paused" text will appear on the screen
             if (ToBePaused == true)
             {
                 ToBePaused = false;
@@ -176,15 +181,15 @@ namespace SpaceInvaders
         {
             if (OnGoing)
             {
-                // Lives and score and will be printed at the top of the window 
+                // Lives, level and score and will be printed at the top of the window 
                 // This time also Difficulty will be printed, but this information will be hidden in final releases
                 Writing.Print(pixels, $"Vite:{Lives}{Environment.NewLine}Livello:{Level}", (int)Corners.Top_Left);
                 Writing.Print(pixels, $"Punti:{Score}", (int)Corners.Top_Right);
                 if (IsPaused()) Writing.Print(pixels, "In pausa", (int)Corners.Bottom_Left);
 
-                // Every projectile and every enemy will be drawn
+                // Every projectile and every enemy will be drawn with their styles
                 Draw.AllElements(pixels, Enemies, Enemy.Subject.Image, Enemy.Subject.Style);
-                Draw.AllElements(pixels, Projectiles, Spaceship.Projectile.Image, Enemy.Subject.Style);
+                Draw.AllElements(pixels, Projectiles, Spaceship.Projectile.Image, Spaceship.Projectile.Style);
                 Draw.AllElements(pixels, Bosses, Boss.Subject.Image, Boss.Subject.Style);
 
                 // Draw the spaceship differently, depending on the state
@@ -194,9 +199,11 @@ namespace SpaceInvaders
             {
                 SetPaused(true);
 
-                Writing.Print(pixels, $"Sei morto!{Environment.NewLine}Punti: {Score}" +
-                                      $"{Environment.NewLine}{Environment.NewLine}Tempo giocato: {Utilities.TimeElapsed((int)FrameCount / GameConfig.FrameRate)}" +
-                                      $"{Environment.NewLine}{Environment.NewLine}Premere ESC per uscire", (int)Corners.Top_Left);
+                Writing.Print(pixels,   $"Sei morto!{Environment.NewLine}" +
+                                        $"{Environment.NewLine}Punti: {Score}" +
+                                        $"{Environment.NewLine}Livello raggiunto: {Level}" +
+                                        $"{Environment.NewLine}Tempo giocato: {Utilities.TimeElapsed((int)FrameCount / GameConfig.FrameRate)}" +
+                                        $"{Environment.NewLine}{Environment.NewLine}Premere ESC per uscire", (int)Corners.Top_Left);
                 Writing.Print(pixels, "Grazie per aver giocato!", (int)Corners.Bottom_Right);
             }
         }
@@ -254,25 +261,6 @@ namespace SpaceInvaders
         }
     }
 
-    // Public class for drawing
-    public class Draw
-    {
-        // All the elements of the same type (Like projectiles and enemies) can be drawn in one cycle
-        public static void AllElements(int[,] pixels, List<Element> This, GameImage Image, PaintStyle Style)
-        {
-            for (int i = 0; i < This.Count; i++)
-            {
-                GameUtils.DrawImageOnScreen(pixels, Image, new Point((int)(This[i].Position[0]), (int)(This[i].Position[1])), Style);
-            }
-        }
-
-        // One element
-        public static void Element(int[,] pixels, int[] This_Pos, GameImage This_Image)
-        {
-            GameUtils.DrawImageOnScreen(pixels, This_Image, new Point((int)(This_Pos[0]), (int)(This_Pos[1])));
-        }
-    }
-
     // Public class for mathematical utilities
     public class Utilities
     {
@@ -289,6 +277,7 @@ namespace SpaceInvaders
             return AlwaysPositive(First_Point - Second_Point);
         }
 
+        // String parser to get XXm, YYs
         public static string TimeElapsed(int Time)
         {
             int Seconds = Time % 60;
@@ -311,7 +300,7 @@ namespace SpaceInvaders
         // Check for all elements of the same kind. If one element is out of the pixel matrix, it gets deleted to save RAM
         public static void Despawn(List<Element> ElementType)
         {
-            for (global::System.Int32 i = 0; i < ElementType.Count; i++)
+            for (int i = 0; i < ElementType.Count; i++)
             {
                 if (ElementType[i].Position[0] > GameConfig.PixelsMatrixWidth || ElementType[i].Position[0] < 0 || ElementType[i].Position[1] > GameConfig.PixelsMatrixWidth || ElementType[i].Position[1] < 0)
                 {
@@ -329,7 +318,8 @@ namespace SpaceInvaders
          * it remove the 2 elements from the lists and ends the cycle.
          * Then, the cicle gets interrupted, in order to prevent Exceptions(index out of array).
          * This check limits to act once per frame. However, Enemies and projectiles have more frames to
-         * finally delete themselves,
+         * finally delete themselves.
+         * Type is for choosing between enemies and bosses. For bosses, killing them increase player's lives
          */
         public static void EnemyShot(List<Element> Enemies, int[] Enemies_Range, List<Element> Projectiles, int[] Projectiles_Range, int Type)
         {
@@ -366,9 +356,11 @@ namespace SpaceInvaders
                 }
             }
         }
+
+        // Forgotten enemies lead the player to lose the amount of lives equal to enemies'.
         public static void ForgottenEnemies(List<Element> ElementType)
         {
-            for (global::System.Int32 i = 0; i < ElementType.Count; i++)
+            for (int i = 0; i < ElementType.Count; i++)
             {
                 if (ElementType[i].Position[1] > GameConfig.PixelsMatrixWidth)
                 {
@@ -379,11 +371,7 @@ namespace SpaceInvaders
             }
         }
 
-        /* This function is made forthe Spaceship (First) and enemies (Second).
-         * This is like the previus function, with the main difference being the number of cycles: It's only one,
-         * as the spaceship remains the same.
-         * The spaceship will be marked as attacked, and the lives count will decrease by 1
-         */
+        // This function is exclusive to the spaceship
         public static void SpaceshipAttacked(List<Element> Enemies)
         {
             for (int j = 0; j < Enemies.Count; j++)
@@ -404,6 +392,7 @@ namespace SpaceInvaders
         // Enemies generation, depending on the difficulty
         public static void Enemies()
         {
+            // Every 30s, a boss spawns
             if (Game.FramesPlayed % (30 * Game.GameConfig.FrameRate) == 0)
             {
                 Game.Bosses.Add(new Element
@@ -414,6 +403,8 @@ namespace SpaceInvaders
                 }
                 );
             }
+
+            // Enemies can spawn between 5% and 95% the screen width, so they're reachable.
             if (Game.FramesPlayed % (int) (2d * (double) Game.GameConfig.FrameRate / Math.Pow(Game.Level, 0.5d)) == 0) // intervallo di tempo
             {
                 Game.Enemies.Add(new Element
@@ -484,7 +475,7 @@ namespace SpaceInvaders
 
             public class Style
             {
-                public static GameImage Normal = GameImage.CreateFromRows(new string[] {
+                public static GameImage Normal_Image = GameImage.CreateFromRows(new string[] {
                     "     ***     ",
                     "     ***     ",
                     "   *******   ",
@@ -497,7 +488,7 @@ namespace SpaceInvaders
     
                 public static PaintStyle Normal_Style = PaintStyle.Default;
 
-                public static GameImage Attacked = GameImage.CreateFromRows(new string[]
+                public static GameImage Attacked_Image = GameImage.CreateFromRows(new string[]
                     {
                     "     $$$     ",
                     "     $*$     ",
@@ -511,7 +502,7 @@ namespace SpaceInvaders
         
                 public static PaintStyle Attacked_Style = PaintStyle.Default;
 
-                public static GameImage Shooting = GameImage.CreateFromRows(new string[] {
+                public static GameImage Shooting_Image = GameImage.CreateFromRows(new string[] {
                     "     ...     ",
                     "     ...     ",
                     "   **...**   ",
@@ -529,21 +520,20 @@ namespace SpaceInvaders
                 {
                     if (Subject.isAttacked)
                     {
-                        GameUtils.DrawImageOnScreen(pixels, Style.Attacked, new Point((int)(Subject.Position[0]), (int)(Subject.Position[1])), Attacked_Style);
+                        InvadingAliens.Draw.Element(pixels, new int[] { Subject.Position[0], Subject.Position[1] }, Attacked_Image, Attacked_Style);
                         Subject.isAttacked = false;
                     }
                     else if (Subject.isShooting)
                     {
-                        GameUtils.DrawImageOnScreen(pixels, Style.Shooting, new Point((int)(Subject.Position[0]), (int)(Subject.Position[1])), Shooting_Style);
+                        InvadingAliens.Draw.Element(pixels, new int[] { Subject.Position[0], Subject.Position[1] }, Shooting_Image, Shooting_Style);
                         Subject.isShooting = false;
                     }
                     else
                     {
-                        GameUtils.DrawImageOnScreen(pixels, Style.Normal, new Point((int)(Subject.Position[0]), (int)(Subject.Position[1])), Normal_Style);
+                        InvadingAliens.Draw.Element(pixels, new int[] { Subject.Position[0], Subject.Position[1] }, Normal_Image, Normal_Style);
                     }
                 }
             }
-
         }
         public class Projectile
         {
@@ -584,17 +574,6 @@ namespace SpaceInvaders
             }, new char[] { ' ', '*' }, AnchorType.Center);
             public static PaintStyle Style = PaintStyle.Default;
         }
-        public class Projectile
-        {
-            public static int[] Range = new int[] { 1, 1 };
-            public static GameImage Image = new GameImage(
-            new int[,]
-            {
-            {1}
-            },
-            AnchorType.Center);
-            public static PaintStyle Style = PaintStyle.Default;
-        }
     }
 
     public class Boss
@@ -608,34 +587,21 @@ namespace SpaceInvaders
             {
             "*     **     *",
             "**    **    **",
-            " **  *  *  ** ",
-            "  ***    ***  ",
+            " **  ****  ** ",
+            "  ****  ****  ",
             "   **    **   ",
-            "  * **  ** *  ",
-            " *   ****   * ",
-            "*     **     *",
-            " *   ****   * ",
-            "  * **  ** *  ",
+            "  ****  ****  ",
+            " **  ****  ** ",
+            "**    **    **",
+            " **  ****  ** ",
+            "  ****  ****  ",
             "   **    **   ",
-            "  ***    ***  ",
-            " **  *  *  ** ",
+            "  ****  ****  ",
+            " **  ****  ** ",
             "**    **    **",
             "*     **     *"
             }, new char[] { ' ', '*' }, AnchorType.Center);
             public static PaintStyle Style = PaintStyle.Default;
         }
-
-        public class Projectile
-        {
-            public static int[] Range = new int[] { 1, 1 };
-            public static GameImage Image = new GameImage(
-            new int[,]
-            {
-            {1}
-            },
-            AnchorType.Center);
-            public static PaintStyle Style = PaintStyle.Default;
-        }
     }
-
 }
