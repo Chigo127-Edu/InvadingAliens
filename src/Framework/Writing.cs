@@ -1,6 +1,3 @@
-using System;
-using System.Drawing;
-
 /*
     Writing part of the Framework, to write text onto the pixel matrix.
     Copyright (C) 2026 Chigo127-Edu, Ale-Cioffo
@@ -21,6 +18,9 @@ using System.Drawing;
     Chigo127-Edu: https://github.com/Chigo127-Edu/
     Ale-Cioffo: https://github.com/Ale-Cioffo/
  */
+
+using System;
+using System.Drawing;
 
 namespace RetroGameFramework
 {
