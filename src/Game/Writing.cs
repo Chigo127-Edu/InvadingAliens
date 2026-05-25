@@ -68,22 +68,7 @@ namespace RetroGameFramework
                         for (int i = 0; i < Value.Length; i++)
                         {
                             // Line feed
-                            if (Value[i] == '\n')
-                            {
-                                OffsetY += 8; i++;
-
-                                // Check for a carriage return right after the line feed 
-                                if (Value[i] == '\r') { OffsetX = 0; i++; }
-                            }
-
-                            // Carriage return
-                            if (Value[i] == '\r')
-                            {
-                                OffsetX = 0; i++;
-
-                                // Check for a line feed right after the carriage return
-                                if (Value[i] == '\n') { OffsetY += 8; i++; }
-                            }
+                            if ((Value[i] == '\n' && Value[i + 1] == '\r') || (Value[i] == '\r' && Value[i + 1] == '\n')) { OffsetX = -2; OffsetY += 8; }
 
                             if (i < Value.Length) DrawElement(pixels, new int[] { Pos_Top_Left[0] + (6 * OffsetX) + Char_Radius[0], Pos_Top_Left[1] + Char_Radius[1] + OffsetY }, Chars[GetChar(Value[i])]);
                             OffsetX++;
