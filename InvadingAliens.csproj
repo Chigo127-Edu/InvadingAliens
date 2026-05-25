@@ -60,7 +60,11 @@
     <Compile Include="src\Framework\ImageLoader.cs" />
     <Compile Include="src\Framework\PaintStyle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+<<<<<<< HEAD:InvadingAliens.csproj
     <Compile Include="src\Game\Writing.cs" />
+=======
+    <Compile Include="src\RetroGameFramework\Writing.cs" />
+>>>>>>> b222f6b2145f8dcac99e3eda4c229bf7b9fdbd74:RetroGameFramework.csproj
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
