@@ -1,20 +1,47 @@
-using InvadingAliens;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Drawing;
 
-namespace InvadingAliens
+/*
+    Writing part of the Framework, to write text onto the pixel matrix.
+    Copyright (C) 2026 Chigo127-Edu, Ale-Cioffo
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+    Chigo127-Edu: https://github.com/Chigo127-Edu/
+    Ale-Cioffo: https://github.com/Ale-Cioffo/
+ */
+
+namespace RetroGameFramework
 {
     public class Writing
     {
+        // Draw elements more easily
+        private static void DrawElement(int[,] pixels, int[] This_Pos, GameImage This_Image)
+        {
+            GameUtils.DrawImageOnScreen(pixels, This_Image, new Point((int)(This_Pos[0]), (int)(This_Pos[1])));
+        }
+
+        public static int Top_Left = 0;
+        public static int Top_Right = 1;
+        public static int Bottom_Left = 2;
+        public static int Bottom_Right = 3;
+
         // Corners
-        private static int[] TopLeft = new int[] { 1, 1 };
-        private static int[] TopRight = new int[] { RetroGameFramework.GameConfig.PixelsMatrixWidth - 2, 1 };
-        private static int[] BottomLeft = new int[] { 1, RetroGameFramework.GameConfig.PixelsMatrixHeight - 2 };
-        private static int[] BottomRight = new int[] { RetroGameFramework.GameConfig.PixelsMatrixWidth - 2, RetroGameFramework.GameConfig.PixelsMatrixHeight - 2 };
+        private static int[] Pos_Top_Left = new int[] { 1, 1 };
+        private static int[] Pos_Top_Right = new int[] { GameLogic.GameConfig.PixelsMatrixWidth - 2, 1 };
+        private static int[] Pos_Bottom_Left = new int[] { 1, GameLogic.GameConfig.PixelsMatrixHeight - 2 };
+        private static int[] Pos_Bottom_Right = new int[] { GameLogic.GameConfig.PixelsMatrixWidth - 2, GameLogic.GameConfig.PixelsMatrixHeight - 2 };
 
         // Char radius, like enemies and projectiles'
         private static int[] Char_Radius = new int[] { 2, 3 };
@@ -35,12 +62,30 @@ namespace InvadingAliens
             {
                 case 0:
                     {
+                        // Offsets for line feed and carriage return
                         int OffsetX = 0;
                         int OffsetY = 0;
                         for (int i = 0; i < Value.Length; i++)
                         {
-                            if (Value[i] == '\r' && Value[i + 1] == '\n' || Value[i] == '\n' && Value[i + 1] == '\r') { OffsetX = -2; OffsetY += 8; }
-                            Draw.Element(pixels, new int[] { TopLeft[0] + (6 * OffsetX) + Char_Radius[0], TopLeft[1] + Char_Radius[1] + OffsetY }, Chars[GetChar(Value[i])]);
+                            // Line feed
+                            if (Value[i] == '\n')
+                            {
+                                OffsetY += 8; i++;
+
+                                // Check for a carriage return right after the line feed 
+                                if (Value[i] == '\r') { OffsetX = 0; i++; }
+                            }
+
+                            // Carriage return
+                            if (Value[i] == '\r')
+                            {
+                                OffsetX = 0; i++;
+
+                                // Check for a line feed right after the carriage return
+                                if (Value[i] == '\n') { OffsetY += 8; i++; }
+                            }
+
+                            if (i < Value.Length) DrawElement(pixels, new int[] { Pos_Top_Left[0] + (6 * OffsetX) + Char_Radius[0], Pos_Top_Left[1] + Char_Radius[1] + OffsetY }, Chars[GetChar(Value[i])]);
                             OffsetX++;
                         }
                     }
@@ -49,7 +94,10 @@ namespace InvadingAliens
                     {
                         for (int i = 0; i < Value.Length; i++)
                         {
-                            Draw.Element(pixels, new int[] { TopRight[0] - (6 * i) - Char_Radius[0], TopRight[1] + Char_Radius[1] }, Chars[GetChar(Value[Value.Length - i - 1])]);
+                            // Line feed and carrige return are only supported for top left
+                            if (Value[i] == '\n' || Value[i] == '\r') i++;
+
+                            if (i < Value.Length) DrawElement(pixels, new int[] { Pos_Top_Right[0] - (6 * i) - Char_Radius[0], Pos_Top_Right[1] + Char_Radius[1] }, Chars[GetChar(Value[Value.Length - i - 1])]);
                         }
                     }
                     break;
@@ -57,7 +105,10 @@ namespace InvadingAliens
                     {
                         for (int i = 0; i < Value.Length; i++)
                         {
-                            Draw.Element(pixels, new int[] { BottomLeft[0] + 6 * i + Char_Radius[0], BottomLeft[1] - Char_Radius[1] }, Chars[GetChar(Value[i])]);
+                            // Line feed and carrige return are only supported for top left
+                            if (Value[i] == '\n' || Value[i] == '\r') i++;
+
+                            if (i < Value.Length) DrawElement(pixels, new int[] { Pos_Bottom_Left[0] + 6 * i + Char_Radius[0], Pos_Bottom_Left[1] - Char_Radius[1] }, Chars[GetChar(Value[i])]);
                         }
                     }
                     break;
@@ -65,7 +116,10 @@ namespace InvadingAliens
                     {
                         for (int i = 0; i < Value.Length; i++)
                         {
-                            Draw.Element(pixels, new int[] { BottomRight[0] - (6 * i) - Char_Radius[0], BottomRight[1] - Char_Radius[1] }, Chars[GetChar(Value[Value.Length - i - 1])]);
+                            // Line feed and carrige return are only supported for top left
+                            if (Value[i] == '\n' || Value[i] == '\r') i++;
+
+                            if (i < Value.Length) DrawElement(pixels, new int[] { Pos_Bottom_Right[0] - (6 * i) - Char_Radius[0], Pos_Bottom_Right[1] - Char_Radius[1] }, Chars[GetChar(Value[Value.Length - i - 1])]);
                         }
                     }
                     break;
@@ -74,10 +128,10 @@ namespace InvadingAliens
             }
         }
 
-        // An overwhelming array containing capital letters, numbers and some symbols, as RetroGameFramework.RetroGameFramework.GameImages
-        private static RetroGameFramework.GameImage[] Chars = new RetroGameFramework.GameImage[]
+        // An overwhelming array containing capital letters, numbers and some symbols, as GameImages
+        private static GameImage[] Chars = new GameImage[]
         {
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -85,9 +139,9 @@ namespace InvadingAliens
             "     ",
             "     ",
             "     ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "  *  ",
             "  *  ",
             "  *  ",
@@ -95,9 +149,9 @@ namespace InvadingAliens
             "  *  ",
             "     ",
             "  *  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " * * ",
             " * * ",
             " * * ",
@@ -105,9 +159,9 @@ namespace InvadingAliens
             "     ",
             "     ",
             "     ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " * * ",
             " * * ",
             "*****",
@@ -115,9 +169,9 @@ namespace InvadingAliens
             "*****",
             " * * ",
             " * * ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "  *  ",
             " ****",
             "* *  ",
@@ -125,9 +179,9 @@ namespace InvadingAliens
             "  * *",
             "**** ",
             "  *  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "**  *",
             "**  *",
             "   * ",
@@ -135,9 +189,9 @@ namespace InvadingAliens
             " *   ",
             "*  **",
             "*  **",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " **  ",
             "*  * ",
             " **  ",
@@ -145,9 +199,9 @@ namespace InvadingAliens
             "*  * ",
             "*  * ",
             " ** *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "  *  ",
             "  *  ",
             "  *  ",
@@ -155,9 +209,9 @@ namespace InvadingAliens
             "     ",
             "     ",
             "     ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "   * ",
             "  *  ",
             " *   ",
@@ -165,9 +219,9 @@ namespace InvadingAliens
             " *   ",
             "  *  ",
             "   * ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *   ",
             "  *  ",
             "   * ",
@@ -175,9 +229,9 @@ namespace InvadingAliens
             "   * ",
             "  *  ",
             " *   ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "  *  ",
             "* * *",
@@ -185,9 +239,9 @@ namespace InvadingAliens
             "* * *",
             "  *  ",
             "     ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "  *  ",
             "  *  ",
@@ -195,9 +249,9 @@ namespace InvadingAliens
             "  *  ",
             "  *  ",
             "     ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -205,9 +259,9 @@ namespace InvadingAliens
             "   * ",
             "   *  ",
             " **  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -215,9 +269,9 @@ namespace InvadingAliens
             "     ",
             "     ",
             "     ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -225,9 +279,9 @@ namespace InvadingAliens
             "     ",
             "     ",
             "  *  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "    *",
             "    *",
             "   * ",
@@ -235,9 +289,9 @@ namespace InvadingAliens
             " *   ",
             "*    ",
             "*    ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*  **",
@@ -245,9 +299,9 @@ namespace InvadingAliens
             "**  *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "  *  ",
             " **  ",
             "* *  ",
@@ -255,9 +309,9 @@ namespace InvadingAliens
             "  *  ",
             "  *  ",
             "*****",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "    *",
@@ -265,9 +319,9 @@ namespace InvadingAliens
             "*    ",
             "*    ",
             "*****",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "    *",
@@ -275,9 +329,9 @@ namespace InvadingAliens
             "    *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "  ** ",
             " * * ",
             "*  * ",
@@ -285,9 +339,9 @@ namespace InvadingAliens
             "*****",
             "   * ",
             "   * ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*****",
             "*    ",
             "**** ",
@@ -295,9 +349,9 @@ namespace InvadingAliens
             "    *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "*    ",
             "*    ",
@@ -305,9 +359,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*****",
             "*   *",
             "    *",
@@ -315,9 +369,9 @@ namespace InvadingAliens
             "  *  ",
             " *   ",
             "*    ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -325,9 +379,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -335,9 +389,9 @@ namespace InvadingAliens
             "    *",
             "    *",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -345,9 +399,9 @@ namespace InvadingAliens
             "     ",
             "     ",
             "  *  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -355,9 +409,9 @@ namespace InvadingAliens
             "     ",
             "   * ",
             " **  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "   **",
             " **  ",
@@ -365,9 +419,9 @@ namespace InvadingAliens
             " **  ",
             "   **",
             "     ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "*****",
@@ -375,9 +429,9 @@ namespace InvadingAliens
             "*****",
             "     ",
             "     ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "**   ",
             "  ** ",
@@ -385,9 +439,9 @@ namespace InvadingAliens
             "  ** ",
             "**   ",
             "     ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "   * ",
@@ -395,9 +449,9 @@ namespace InvadingAliens
             "  *  ",
             "     ",
             "  *  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "* ***",
@@ -405,9 +459,9 @@ namespace InvadingAliens
             "*    ",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -415,9 +469,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             "*   *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "**** ",
             "*   *",
             "*   *",
@@ -425,9 +479,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             "**** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*    ",
@@ -435,9 +489,9 @@ namespace InvadingAliens
             "*    ",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "**** ",
             "*   *",
             "*   *",
@@ -445,9 +499,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             "**** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*****",
             "*    ",
             "*    ",
@@ -455,9 +509,9 @@ namespace InvadingAliens
             "*    ",
             "*    ",
             "*****",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*****",
             "*    ",
             "*    ",
@@ -465,9 +519,9 @@ namespace InvadingAliens
             "*    ",
             "*    ",
             "*    ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*    ",
@@ -475,9 +529,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             " ****",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             "*   *",
@@ -485,9 +539,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             "*   *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*****",
             "  *  ",
             "  *  ",
@@ -495,9 +549,9 @@ namespace InvadingAliens
             "  *  ",
             "  *  ",
             "*****",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*****",
             "   * ",
             "   * ",
@@ -505,9 +559,9 @@ namespace InvadingAliens
             "   * ",
             "*  * ",
             " **  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*   *",
             "*  * ",
             "* *  ",
@@ -515,9 +569,9 @@ namespace InvadingAliens
             "* *  ",
             "*  * ",
             "*   *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*    ",
             "*    ",
             "*    ",
@@ -525,9 +579,9 @@ namespace InvadingAliens
             "*    ",
             "*    ",
             "*****",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*   *",
             "** **",
             "* * *",
@@ -535,9 +589,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             "*   *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*   *",
             "**  *",
             "* * *",
@@ -545,9 +599,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             "*   *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -555,9 +609,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "**** ",
             "*   *",
             "*   *",
@@ -565,9 +619,9 @@ namespace InvadingAliens
             "*    ",
             "*    ",
             "*    ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "*   *",
             "*   *",
@@ -575,9 +629,9 @@ namespace InvadingAliens
             "* * *",
             "*  * ",
             " ** *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "**** ",
             "*   *",
             "*   *",
@@ -585,9 +639,9 @@ namespace InvadingAliens
             "* *  ",
             "*  * ",
             "*   *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " ****",
             "*    ",
             "*    ",
@@ -595,9 +649,9 @@ namespace InvadingAliens
             "    *",
             "    *",
             "**** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*****",
             "  *  ",
             "  *  ",
@@ -605,9 +659,9 @@ namespace InvadingAliens
             "  *  ",
             "  *  ",
             "  *  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             "*   *",
@@ -615,9 +669,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             "*   *",
@@ -625,9 +679,9 @@ namespace InvadingAliens
             "*   *",
             " * * ",
             "  *  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             "*   *",
@@ -635,9 +689,9 @@ namespace InvadingAliens
             "* * *",
             "* * *",
             " * * ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             " * * ",
@@ -645,9 +699,9 @@ namespace InvadingAliens
             " * * ",
             "*   *",
             "*   *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*   *",
             "*   *",
             " * * ",
@@ -655,9 +709,9 @@ namespace InvadingAliens
             "  *  ",
             "  *  ",
             "  *  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*****",
             "    *",
             "   * ",
@@ -665,9 +719,9 @@ namespace InvadingAliens
             " *   ",
             "*    ",
             "*****",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             " *   ",
             " *   ",
@@ -675,9 +729,9 @@ namespace InvadingAliens
             " *   ",
             " *   ",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "*    ",
             "*    ",
             " *   ",
@@ -685,9 +739,9 @@ namespace InvadingAliens
             "   * ",
             "    *",
             "    *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *** ",
             "   * ",
             "   * ",
@@ -695,9 +749,9 @@ namespace InvadingAliens
             "   * ",
             "   * ",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "  *  ",
             " * * ",
             "*   *",
@@ -705,9 +759,9 @@ namespace InvadingAliens
             "     ",
             "     ",
             "     ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "     ",
@@ -715,9 +769,9 @@ namespace InvadingAliens
             "     ",
             "     ",
             "*****",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *   ",
             "  *  ",
             "   * ",
@@ -725,9 +779,9 @@ namespace InvadingAliens
             "     ",
             "     ",
             "     ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             " *** ",
@@ -735,9 +789,9 @@ namespace InvadingAliens
             " ****",
             "*   *",
             " ****",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "*    ",
             "*    ",
@@ -745,9 +799,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             "**** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             " *** ",
@@ -755,9 +809,9 @@ namespace InvadingAliens
             "*    ",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "    *",
             "    *",
@@ -765,9 +819,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             " ****",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             " *** ",
@@ -775,9 +829,9 @@ namespace InvadingAliens
             "*****",
             "*    ",
             " ****",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             " *** ",
             "*   *",
@@ -785,9 +839,9 @@ namespace InvadingAliens
             "***  ",
             "*    ",
             "*    ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             " ****",
@@ -795,9 +849,9 @@ namespace InvadingAliens
             " ****",
             "    *",
             "**** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "*    ",
             "*    ",
@@ -805,9 +859,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             "*   *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "  *  ",
             "     ",
             "  *  ",
@@ -815,9 +869,9 @@ namespace InvadingAliens
             "  *  ",
             "  *  ",
             "  *  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "   * ",
             "     ",
             "   * ",
@@ -825,9 +879,9 @@ namespace InvadingAliens
             "   * ",
             " * * ",
             "  *  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "*    ",
             "*   *",
@@ -835,9 +889,9 @@ namespace InvadingAliens
             "**   ",
             "* ** ",
             "*   *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "  *  ",
             "  *  ",
             "  *  ",
@@ -845,9 +899,9 @@ namespace InvadingAliens
             "  *  ",
             "  *  ",
             "   * ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "** * ",
@@ -855,9 +909,9 @@ namespace InvadingAliens
             "* * *",
             "* * *",
             "* * *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "* ** ",
@@ -865,9 +919,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             "*   *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             " *** ",
@@ -875,9 +929,9 @@ namespace InvadingAliens
             "*   *",
             "*   *",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "**** ",
@@ -885,9 +939,9 @@ namespace InvadingAliens
             "**** ",
             "*    ",
             "*    ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             " ****",
@@ -895,9 +949,9 @@ namespace InvadingAliens
             " ****",
             "    *",
             "    *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "*  **",
@@ -905,9 +959,9 @@ namespace InvadingAliens
             "**   ",
             "*    ",
             "*    ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             " ****",
@@ -915,9 +969,9 @@ namespace InvadingAliens
             " *** ",
             "    *",
             "**** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "  *  ",
             "  *  ",
             " *** ",
@@ -925,9 +979,9 @@ namespace InvadingAliens
             "  *  ",
             "  *  ",
             "   **",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "*   *",
@@ -935,9 +989,9 @@ namespace InvadingAliens
             "*   *",
             "*  **",
             " ** *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "*   *",
@@ -945,9 +999,9 @@ namespace InvadingAliens
             "*   *",
             " * * ",
             "  * ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "* * *",
@@ -955,9 +1009,9 @@ namespace InvadingAliens
             "* * *",
             "* * *",
             " * * ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "*   *",
@@ -965,9 +1019,9 @@ namespace InvadingAliens
             "  *  ",
             " * * ",
             "*   *",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "*   *",
@@ -975,9 +1029,9 @@ namespace InvadingAliens
             " ****",
             "    *",
             " *** ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             "*****",
@@ -985,9 +1039,9 @@ namespace InvadingAliens
             " *** ",
             "*    ",
             "*****",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "   * ",
             "  *  ",
             "  *  ",
@@ -995,9 +1049,9 @@ namespace InvadingAliens
             "  *  ",
             "  *  ",
             "   * ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "  *  ",
             "  *  ",
             "  *  ",
@@ -1005,9 +1059,9 @@ namespace InvadingAliens
             "  *  ",
             "  *  ",
             "  *  ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             " *   ",
             "  *  ",
             "  *  ",
@@ -1015,9 +1069,9 @@ namespace InvadingAliens
             "  *  ",
             "  *  ",
             " *   ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
 
-            RetroGameFramework.GameImage.CreateFromRows(new string[] {
+            GameImage.CreateFromRows(new string[] {
             "     ",
             "     ",
             " *  *",
@@ -1025,8 +1079,9 @@ namespace InvadingAliens
             "*  * ",
             "     ",
             "     ",
-        }, new char[] { ' ', '*' }, RetroGameFramework.AnchorType.Center),
+        }, new char[] { ' ', '*' }, AnchorType.Center),
         };
 
     }
+
 }

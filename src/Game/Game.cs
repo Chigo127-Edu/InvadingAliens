@@ -1,3 +1,24 @@
+/*
+    InvadingAliens Game.
+    Copyright (C) 2026 Chigo127-Edu, Ale-Cioffo
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+    Chigo127-Edu: https://github.com/Chigo127-Edu/
+    Ale-Cioffo: https://github.com/Ale-Cioffo/
+ */
+
 using RetroGameFramework;
 using System;
 using System.Collections.Generic;
@@ -67,8 +88,8 @@ namespace InvadingAliens
         protected override void OnInitGameConfig(GameConfig GameConfig)
         {
             GameConfig.Title = "InvadingAliens";
-            GameConfig.PixelsMatrixWidth = 160;
-            GameConfig.PixelsMatrixHeight = 120;
+            GameLogic.GameConfig.PixelsMatrixWidth = 160;
+            GameLogic.GameConfig.PixelsMatrixHeight = 120;
             GameConfig.PixelSize = 5;
             GameConfig.FrameRate = 24;
             GameConfig.ForegroundColor = System.Drawing.Color.White;
@@ -302,7 +323,7 @@ namespace InvadingAliens
         {
             for (int i = 0; i < ElementType.Count; i++)
             {
-                if (ElementType[i].Position[0] > GameConfig.PixelsMatrixWidth || ElementType[i].Position[0] < 0 || ElementType[i].Position[1] > GameConfig.PixelsMatrixWidth || ElementType[i].Position[1] < 0)
+                if (ElementType[i].Position[0] > GameLogic.GameConfig.PixelsMatrixWidth || ElementType[i].Position[0] < 0 || ElementType[i].Position[1] > GameLogic.GameConfig.PixelsMatrixWidth || ElementType[i].Position[1] < 0)
                 {
                     ElementType.Remove(ElementType[i]);
                 }
@@ -362,7 +383,7 @@ namespace InvadingAliens
         {
             for (int i = 0; i < ElementType.Count; i++)
             {
-                if (ElementType[i].Position[1] > GameConfig.PixelsMatrixWidth)
+                if (ElementType[i].Position[1] > GameLogic.GameConfig.PixelsMatrixWidth)
                 {
                     Game.Lives -= ElementType[i].Lives;
                     ElementType.Remove(ElementType[i]);
@@ -397,7 +418,7 @@ namespace InvadingAliens
             {
                 Game.Bosses.Add(new Element
                 {
-                    Position = new int[] { (int)(GameConfig.PixelsMatrixWidth / 2), (int)(12) },
+                    Position = new int[] { (int)(GameLogic.GameConfig.PixelsMatrixWidth / 2), (int)(12) },
                     Speed = new int[] { 0, (int)(Math.Sqrt(Game.Level)) },
                     Lives = Game.Level
                 }
@@ -409,7 +430,7 @@ namespace InvadingAliens
             {
                 Game.Enemies.Add(new Element
                 {
-                    Position = new int[] { (int)((double)(0.05 * GameConfig.PixelsMatrixWidth) + (double)(0.9 * GameConfig.PixelsMatrixWidth) * (double)Game.RandomGenerator.Next() / 2147483647), (int)(5) },
+                    Position = new int[] { (int)((double)(0.05 * GameLogic.GameConfig.PixelsMatrixWidth) + (double)(0.9 * GameLogic.GameConfig.PixelsMatrixWidth) * (double)Game.RandomGenerator.Next() / 2147483647), (int)(5) },
                     Speed = new int[] { 0, (int)(Math.Pow(Game.Level, 1/4)) },
                     Lives = 1
                 }
@@ -456,9 +477,9 @@ namespace InvadingAliens
         public static void Spaceship_Border(int Offset)
         {
             if (Spaceship.Subject.Position[0] < Spaceship.Subject.Range[0] + Offset) Spaceship.Subject.Position[0] = Spaceship.Subject.Range[0] + Offset;
-            if (Spaceship.Subject.Position[0] > GameConfig.PixelsMatrixWidth - Spaceship.Subject.Range[0] - 1 - Offset) Spaceship.Subject.Position[0] = GameConfig.PixelsMatrixWidth - Spaceship.Subject.Range[0] - 1 - Offset;
+            if (Spaceship.Subject.Position[0] > GameLogic.GameConfig.PixelsMatrixWidth - Spaceship.Subject.Range[0] - 1 - Offset) Spaceship.Subject.Position[0] = GameLogic.GameConfig.PixelsMatrixWidth - Spaceship.Subject.Range[0] - 1 - Offset;
             if (Spaceship.Subject.Position[1] < Spaceship.Subject.Range[1] + Offset) Spaceship.Subject.Position[1] = Spaceship.Subject.Range[1] + Offset;
-            if (Spaceship.Subject.Position[1] > GameConfig.PixelsMatrixHeight - Spaceship.Subject.Range[1] - Offset) Spaceship.Subject.Position[1] = GameConfig.PixelsMatrixHeight - Spaceship.Subject.Range[1] - Offset;
+            if (Spaceship.Subject.Position[1] > GameLogic.GameConfig.PixelsMatrixHeight - Spaceship.Subject.Range[1] - Offset) Spaceship.Subject.Position[1] = GameLogic.GameConfig.PixelsMatrixHeight - Spaceship.Subject.Range[1] - Offset;
         }
     }
 
@@ -467,7 +488,7 @@ namespace InvadingAliens
     {
         public class Subject
         {
-            public static int[] Position = new int[] { GameConfig.PixelsMatrixWidth / 2, GameConfig.PixelsMatrixHeight - 10 };
+            public static int[] Position = new int[] { GameLogic.GameConfig.PixelsMatrixWidth / 2, GameLogic.GameConfig.PixelsMatrixHeight - 10 };
             public static int[] Speed = new int[] { 4, 4 };
             public static int[] Range = new int[] { 6, 4 };
             public static bool isAttacked = false;
