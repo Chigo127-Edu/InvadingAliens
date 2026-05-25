@@ -164,6 +164,9 @@ namespace RetroGameDemo
             int screenWidth = pixels.GetLength(0);
             int screenHeight = pixels.GetLength(1);
 
+            // Write text onto the pixel matrix
+            // Writing.Print(pixels, "Demo", Writing.Top_Left);
+
             // Draw the background star images at the center of the screen
             GameUtils.DrawImageOnScreen(pixels, starImage, new Point((int)(screenWidth * 0.25), (int)(screenHeight * 0.25)), starStyle);
             GameUtils.DrawImageOnScreen(pixels, starImage, new Point((int)(screenWidth * 0.25), (int)(screenHeight * 0.75)), starStyle);
