@@ -1066,7 +1066,5 @@ namespace RetroGameFramework
             "     ",
         }, new char[] { ' ', '*' }, AnchorType.Center),
         };
-
     }
-
 }
