@@ -27,9 +27,9 @@ namespace RetroGameFramework
     public class Writing
     {
         // Draw elements more easily
-        private static void DrawElement(int[,] pixels, int[] This_Pos, GameImage This_Image)
+        private static void DrawElement(int[,] pixels, int[] This_Pos, GameImage This_Image, PaintStyle paintStyle)
         {
-            GameUtils.DrawImageOnScreen(pixels, This_Image, new Point((int)(This_Pos[0]), (int)(This_Pos[1])));
+            GameUtils.DrawImageOnScreen(pixels, This_Image, new Point((int)(This_Pos[0]), (int)(This_Pos[1])), paintStyle);
         }
 
         // Corners indexes used by the programmer
@@ -55,7 +55,7 @@ namespace RetroGameFramework
         }
 
         // Print the string onto the screen. Currently line feed and carriage return is supported only for the top left
-        public static void Print(int[,] pixels, string Value, int Corner)
+        public static void Print(int[,] pixels, string Value, int Corner, PaintStyle paintStyle)
         {
             switch (Corner)
             {
@@ -68,7 +68,7 @@ namespace RetroGameFramework
                         {
                             if (Value[i] == '\n') { OffsetY += 8; OffsetX -= 1; }
                             else if (Value[i] == '\r') OffsetX = -1;
-                            else if (i < Value.Length) DrawElement(pixels, new int[] { Pos_Top_Left[0] + (6 * OffsetX) + Char_Radius[0], Pos_Top_Left[1] + Char_Radius[1] + OffsetY }, Chars[GetChar(Value[i])]);
+                            else if (i < Value.Length) DrawElement(pixels, new int[] { Pos_Top_Left[0] + (6 * OffsetX) + Char_Radius[0], Pos_Top_Left[1] + Char_Radius[1] + OffsetY }, Chars[GetChar(Value[i])], paintStyle);
                             OffsetX++;
                         }
                     }
@@ -80,7 +80,7 @@ namespace RetroGameFramework
                             // Line feed and carrige return are only supported for top left
                             if (Value[i] == '\n' || Value[i] == '\r') i++;
 
-                            if (i < Value.Length) DrawElement(pixels, new int[] { Pos_Top_Right[0] - (6 * i) - Char_Radius[0], Pos_Top_Right[1] + Char_Radius[1] }, Chars[GetChar(Value[Value.Length - i - 1])]);
+                            if (i < Value.Length) DrawElement(pixels, new int[] { Pos_Top_Right[0] - (6 * i) - Char_Radius[0], Pos_Top_Right[1] + Char_Radius[1] }, Chars[GetChar(Value[Value.Length - i - 1])], paintStyle);
                         }
                     }
                     break;
@@ -91,7 +91,7 @@ namespace RetroGameFramework
                             // Line feed and carrige return are only supported for top left
                             if (Value[i] == '\n' || Value[i] == '\r') i++;
 
-                            if (i < Value.Length) DrawElement(pixels, new int[] { Pos_Bottom_Left[0] + 6 * i + Char_Radius[0], Pos_Bottom_Left[1] - Char_Radius[1] }, Chars[GetChar(Value[i])]);
+                            if (i < Value.Length) DrawElement(pixels, new int[] { Pos_Bottom_Left[0] + 6 * i + Char_Radius[0], Pos_Bottom_Left[1] - Char_Radius[1] }, Chars[GetChar(Value[i])], paintStyle);
                         }
                     }
                     break;
@@ -102,13 +102,18 @@ namespace RetroGameFramework
                             // Line feed and carrige return are only supported for top left
                             if (Value[i] == '\n' || Value[i] == '\r') i++;
 
-                            if (i < Value.Length) DrawElement(pixels, new int[] { Pos_Bottom_Right[0] - (6 * i) - Char_Radius[0], Pos_Bottom_Right[1] - Char_Radius[1] }, Chars[GetChar(Value[Value.Length - i - 1])]);
+                            if (i < Value.Length) DrawElement(pixels, new int[] { Pos_Bottom_Right[0] - (6 * i) - Char_Radius[0], Pos_Bottom_Right[1] - Char_Radius[1] }, Chars[GetChar(Value[Value.Length - i - 1])], paintStyle);
                         }
                     }
                     break;
                 default:
                     break;
             }
+        }
+
+        public static void Print(int[,] pixels, string Value, int Corner)
+        {
+            Print(pixels, Value, Corner, PaintStyle.Default);
         }
 
         // An overwhelming array containing capital letters, numbers and some symbols, as GameImages

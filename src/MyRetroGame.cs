@@ -90,6 +90,8 @@ namespace RetroGameDemo
         GameImage hearthImage = GameImage.CreateFromResource("hearth", AnchorType.Center);
         PaintStyle hearthStyle = PaintStyle.Default;
 
+        PaintStyle textStyle = PaintStyle.Default;
+
         // Initialization call, used to customize GameConfig data (used to customize the engine behaviour)
         protected override void OnInitGameConfig(GameConfig GameConfig)
         {
@@ -136,6 +138,9 @@ namespace RetroGameDemo
 
             hearthStyle.SetColorRemap(1, 2);
             hearthStyle.SetColorRemap(2, 8);
+
+            textStyle.transparentBackground = true;
+            textStyle.SetColorRemap(1, 5);
         }
 
         // Called once per frame, BEFORE the OnLoopGame event.
@@ -165,7 +170,9 @@ namespace RetroGameDemo
             int screenHeight = pixels.GetLength(1);
 
             // Write text onto the pixel matrix
-            // Writing.Print(pixels, "Demo", Writing.Top_Left);
+            Writing.Print(pixels, "Demo", Writing.Top_Left);
+            // Write text onto the pixel matrix
+            Writing.Print(pixels, "Demo", Writing.Top_Right, textStyle);
 
             // Draw the background star images at the center of the screen
             GameUtils.DrawImageOnScreen(pixels, starImage, new Point((int)(screenWidth * 0.25), (int)(screenHeight * 0.25)), starStyle);
