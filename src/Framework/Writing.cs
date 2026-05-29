@@ -1,4 +1,4 @@
-﻿/*
+/*
     Writing part of the Framework, to write text onto the pixel matrix.
     Copyright (C) 2026 Chigo127-Edu, Ale-Cioffo
 
@@ -32,22 +32,22 @@ namespace RetroGameFramework
             GameUtils.DrawImageOnScreen(pixels, This_Image, new Point((int)(This_Pos[0]), (int)(This_Pos[1])), paintStyle);
         }
 
-        // Corners indexes used by the programmer
         public static int Top_Left = 0;
         public static int Top_Right = 1;
         public static int Bottom_Left = 2;
         public static int Bottom_Right = 3;
 
-        // Corners positions used by functions
+        // Corners
         private static int[] Pos_Top_Left = new int[] { 1, 1 };
         private static int[] Pos_Top_Right = new int[] { GameLogic.GameConfig.PixelsMatrixWidth - 2, 1 };
         private static int[] Pos_Bottom_Left = new int[] { 1, GameLogic.GameConfig.PixelsMatrixHeight - 2 };
         private static int[] Pos_Bottom_Right = new int[] { GameLogic.GameConfig.PixelsMatrixWidth - 2, GameLogic.GameConfig.PixelsMatrixHeight - 2 };
 
-        // Char radius (How much it occupies)
+        // Char radius, like enemies and projectiles'
         private static int[] Char_Radius = new int[] { 2, 3 };
 
         // Since the array doesn't start with ASCII element 0 (but 32), the requested index will be converted
+        // For now, letters are forcibly capitalized.
         private static int GetChar(int Value)
         {
             if (Value > 31 && Value < 127) { return Value - 32; }
