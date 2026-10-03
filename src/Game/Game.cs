@@ -457,10 +457,10 @@ namespace InvadingAliens
         // Manual movement
         public static void Player(Keys KeyCode)
         {
-            if (KeyCode == Keys.W) Spaceship.Subject.Position[1] -= Spaceship.Subject.Speed[1];
-            if (KeyCode == Keys.A) Spaceship.Subject.Position[0] -= Spaceship.Subject.Speed[0];
-            if (KeyCode == Keys.S) Spaceship.Subject.Position[1] += Spaceship.Subject.Speed[1];
-            if (KeyCode == Keys.D) Spaceship.Subject.Position[0] += Spaceship.Subject.Speed[1];
+            if (KeyCode == Keys.W || KeyCode == Keys.Up) Spaceship.Subject.Position[1] -= Spaceship.Subject.Speed[1];
+            if (KeyCode == Keys.A || KeyCode == Keys.Left) Spaceship.Subject.Position[0] -= Spaceship.Subject.Speed[0];
+            if (KeyCode == Keys.S || KeyCode == Keys.Down) Spaceship.Subject.Position[1] += Spaceship.Subject.Speed[1];
+            if (KeyCode == Keys.D || KeyCode == Keys.Right) Spaceship.Subject.Position[0] += Spaceship.Subject.Speed[1];
         }
 
         // Automatic movement

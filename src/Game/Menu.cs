@@ -41,6 +41,7 @@ namespace InvadingAliens
             option = entries;
         }
 
+        // caratteri scritti lentamente
         public void StringChar(string frase)
         {
             for (int i = 0; i < frase.Length; i++)
@@ -49,11 +50,13 @@ namespace InvadingAliens
                 Thread.Sleep(40); 
             }
         }
+
+        // mostra menu
         public int MostraMenu()
         {
             Console.CursorVisible = false;
 
-            // posizioni fisse 
+            // posizioni fisse verso metà schermo
             int inizioX = (Console.WindowWidth - TestoInizio.Length) / 2;
             int inizioY = (Console.WindowHeight / 2) - (option.Length / 2) - 2;
             int startYOptions = inizioY + 3;
@@ -62,8 +65,10 @@ namespace InvadingAliens
             {
                 Console.Clear();
 
-                //testo di benvenuto
+                // testo di benvenuto
                 Console.SetCursorPosition(inizioX, inizioY);
+
+                // scrivere piano una volta sola, ossia all'inizio
                 if (!controllo)
                 {
                     StringChar(TestoInizio);
@@ -74,7 +79,7 @@ namespace InvadingAliens
                     Console.Write(TestoInizio); 
                 }
 
-                // Mostra e centra le opzioni del menu
+                // Mostra e centra le opzioni del menu. evidenzia selezionata
                 for (int i = 0; i < option.Length; i++)
                 {
                     string rigaOpzione;
@@ -104,13 +109,17 @@ namespace InvadingAliens
                         Console.Write(rigaOpzione);
                     }
                 }
-                var key = Console.ReadKey(true);
-                if (key.Key == ConsoleKey.W)
+
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                if (key.Key == ConsoleKey.W || key.Key == ConsoleKey.UpArrow)
                 {
+                    // giro verso l'inizio. se la considerazione è il primo elemento, si va alla fine
                     selected = (selected == 0) ? option.Length - 1 : selected - 1;
                 }
-                else if (key.Key == ConsoleKey.S)
+                else if (key.Key == ConsoleKey.S || key.Key == ConsoleKey.DownArrow)
                 {
+                    // giro verso la fine. se la considerazione è l'ultimo elemento, si va all'inizio
                     selected = (selected == option.Length - 1) ? 0 : selected + 1;
                 }
                 else if (key.Key == ConsoleKey.Enter)

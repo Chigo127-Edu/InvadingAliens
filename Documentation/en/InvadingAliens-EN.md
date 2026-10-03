@@ -21,9 +21,9 @@ For both Windows and Wine environments, .NET Framework v4.7.2 is needed.
 
 ## 3. How to play InvadingAliens
 When the game is launched, the player is welcomed by a console menu.<br>
-To choose the desired option, W, A, S, D buttons are used, and CARRIAGE RETURN to choose.
+To choose the desired option, W, A, S, D buttons are used, or the 4 arrows keys, and CARRIAGE RETURN to choose.
 ######
-When a new game is started, the spaceship can be moved using W, A, S, D button as well. It is possible to shoot enemies by generating bullets with SPACE, but it is not possible to move and shoot at he same time.<br>
+When a new game is started, the spaceship can be moved using W, A, S, D buttons, or the 4 arrows keys. It is possible to shoot enemies by generating bullets with SPACE, but it is not possible to move and shoot at he same time.<br>
 The player's duty is to kill enemies and bosses, in order to lose as few lives as possible. Indeed, if the spaceship collides with an enemy or a boss, or goes out the game field (The application window), the player will lose as many lives as the remaining enemy's. For example, if a boss has 3 lives left, the player loses 3 lives.
 ######
 To earn lost lives, it is necessary to kill bosses. Once killed, they give a number of lives equal to the next level. For example, once killed the level 3 boss, the player receives 4 lives, and their level becomes 4.

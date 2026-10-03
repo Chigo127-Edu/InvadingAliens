@@ -1,23 +1,23 @@
 # InvadingAliens 
-(Passa a [🇮🇹Italiano](./README-IT.md))
+(Switch to [🇬🇧English](./README-EN.md))
 
-## Description
-This is a game which uses [RetroGameGramework](https://github.com/profGiovanniVolpintesta/RetroGameFramework), and it is similar to the well-known Space Invaders one.
-- For the Framework's documentation, refer to the relative [folder](./Documentation), or check the original project's README.md file.
-- This game can be run natively on Windows systems. Compatibility with MacOS or Linux via Wine is not guaranteed.
+## Descrizione 
+Questo è un gioco che utilizza il [RetroGameGramework](https://github.com/profGiovanniVolpintesta/RetroGameFramework), ed è simile al noto Space Invaders. 
+- Per la documentazione del framework, fare riferimento al repository originale o alla cartella ```Documentation``` di questo.
+- Questo gioco può essere eseguito nativamente su sistemi Windows. Non è garantita la compatibilità tramite Wine, per MacOS o Linux.
 
-## How the game works
-The game begins after the player chooses to start a new game.<br>
-At a first glance, the user will see a spaceship at the bottom, and some enemies that appear from the top. They will move towards the player's spaceship.<br>
-The player is able to move the spaceship and shoot the enemies, but cannot get out of the game field, which is the window.<br>
-The game's difficulty tends to increase every time a boss is killed. A boss spawns at the center of the field every 30 seconds, and its number of lives and speeds depends on the current level.<br>
-It is possible to pause the game with P, and quit with ESC. WASD keys are used for movement, and SPACE for shooting.<br><br>
+## Funzionamento
+Il gioco inizia non appena il giocatore sceglie di iniziare una nuova partita.<br>
+A primo impatto, l'utente vedrà una navicella in basso, e dei nemici che compariranno dall'alto dello schermo, che si muoveranno verso la navicella.<br>
+Il giocatore è in grado di muovere la navicella e sparare ai nemici, ma non può uscire dal campo di gioco, che è la finestra dell'applicazione.<br>
+La difficoltà del gioco tende ad aumentare ogni volta che un boss viene ucciso. Ogni 30 secondi viene generato un boss. Il suo numero di vite e la sua velocità dipendono dal livello corrente.<br>
+È possibile mettere in pausa il gioco con P ed uscire con ESC. La navicella si muove con WASD e si spara con SPAZIO.<br><br>
 
 ![image](./Pictures/Concetto.png)
 
-In this picture, game elements and movements are represented in a rough way.<br>
+In questa immagine, vengono rappresentati gli elementi e i movimenti nel gioco in maniera grossolana.<br>
 
-For further information about the game, head to the [Documentation](./Documentation/en/InvadingAliens-EN.md).
+Per maggiori informazioni, fare riferimento alla [Documentazione](./Documentation/it/InvadingAliens-IT.md).
 
-## About
-This project is made by Chigo127-Edu and Ale-Cioffo, and is licensed under the GNU General Public License, version 3.<br>
+# A riguardo
+Questo progetto è fatto da Chigo127-Edu e Ale-Cioffo, ed è sottoposto alla GNU General Public License, versione 3.<br>

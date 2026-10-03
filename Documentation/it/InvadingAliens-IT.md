@@ -19,9 +19,9 @@ Sia per ambienti Windows che per ambienti Wine, occorre avere installato il .NET
 
 ## 3. Come si gioca ad InvadingAliens
 Al lancio del gioco, il giocatore viene accolto da un menù introduttivo su console.
-Per scegliere l'opzione desiderata, si utilizzano i tasti W, A, S e D per muoversi ed INVIO per scegliere.
+Per scegliere l'opzione desiderata, si utilizzano i tasti W, A, S e D, oppure le quattro frecce per muoversi ed INVIO per scegliere.
 ######
-Una volta fatto partire un nuovo gioco, la navicella può essere spostata con W, A, S e D. è possibile sparare colpi con SPAZIO, ma non è possibile muoversi e sparare contemporaneamente.
+Una volta fatto partire un nuovo gioco, la navicella può essere spostata con W, A, S e D, oppure le quattro frecce. è possibile sparare colpi con SPAZIO, ma non è possibile muoversi e sparare contemporaneamente.
 Il compito del giocatore è quello di uccidere i nemici e i boss, al fine di perdere meno vite possibile. Difatti, se un nemico/boss collide con la navicella, o esce dal bordo inferiore dello schermo, il giocatore perterà tante vite quante erano quelle rimanenti del nemico/boss. Ad esempio, se un boss ha 3 vite rimanenti, il giocatore perderà 3 vite.
 ######
 Per poter riguadagnare le vite perse, è necessario uccidere i boss. Una volta uccisi, i boss danno un numero di vite pari al livello successivo di quello in corso. Ad esempio, una volta ucciso il boss a fine livello 3, il giocatore riceverà 4 vite e salirà di livello.
