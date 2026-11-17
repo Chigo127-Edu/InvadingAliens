@@ -10,13 +10,13 @@
 ######
 
 ## 1. What is InvadingAliens
-InvadingAliens is an Open-source game inspired by well-known SpaceInvaders. Our version uses [RetroGameFramework](https://github.com/profGiovanniVolpintesta/RetroGameFramework), also Open-Source.<br>
-Hence, the game relies on Windows Forms APIs (Which are not open source), and having .NET Framework v4.7.2 instaled is needed in order to play.
+InvadingAliens is an Open-source game inspired by well-known SpaceInvaders. Our version uses a modified version of [RetroGameFramework](https://github.com/profGiovanniVolpintesta/RetroGameFramework), also Open-Source.<br>
+Hence, the game relies on LibreWinForms, and having .NET 10 installed is needed in order to play.
 ######
 
 ## 2. How to download InvadingAliens
 Head to the [Releases](https://github.com/Chigo127-Edu/InvadingAliens/releases) to download the game.<br>
-For both Windows and Wine environments, .NET Framework v4.7.2 is needed.
+For every environment, .NET 10 is needed.
 ######
 
 ## 3. How to play InvadingAliens
