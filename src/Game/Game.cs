@@ -27,8 +27,6 @@ using System.Reflection.Emit;
 using System.Security.Policy;
 using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Media;
-using System.Windows.Media.Effects;
 
 namespace InvadingAliens
 {
