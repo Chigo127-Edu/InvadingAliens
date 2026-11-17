@@ -202,7 +202,7 @@ namespace InvadingAliens
             {
                 // Lives, level and score and will be printed at the top of the window 
                 // This time also Difficulty will be printed, but this information will be hidden in final releases
-                Writing.Print(pixels, $"Vite:{Lives}{Environment.NewLine}Livello:{Level}", (int)Corners.Top_Left);
+                Writing.Print(pixels, $"Vite:{Lives}\n\rLivello:{Level}", (int)Corners.Top_Left);
                 Writing.Print(pixels, $"Punti:{Score}", (int)Corners.Top_Right);
                 if (IsPaused()) Writing.Print(pixels, "In pausa", (int)Corners.Bottom_Left);
 
@@ -218,11 +218,11 @@ namespace InvadingAliens
             {
                 SetPaused(true);
 
-                Writing.Print(pixels,   $"Sei morto!{Environment.NewLine}" +
-                                        $"{Environment.NewLine}Punti: {Score}" +
-                                        $"{Environment.NewLine}Livello raggiunto: {Level}" +
-                                        $"{Environment.NewLine}Tempo giocato: {Utilities.TimeElapsed((int)FrameCount / GameConfig.FrameRate)}" +
-                                        $"{Environment.NewLine}{Environment.NewLine}Premere ESC per uscire", (int)Corners.Top_Left);
+                Writing.Print(pixels,   $"Sei morto!\n\r" +
+                                        $"\n\rPunti: {Score}" +
+                                        $"\n\rLivello raggiunto: {Level}" +
+                                        $"\n\rTempo giocato: {Utilities.TimeElapsed((int)FrameCount / GameConfig.FrameRate)}" +
+                                        $"\n\r\n\rPremere ESC per uscire", (int)Corners.Top_Left);
                 Writing.Print(pixels, "Grazie per aver giocato!", (int)Corners.Bottom_Right);
             }
         }
